@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<eurekacore-site version="0.0.1" releaseMode="Beta">
+  <node-resources>
+    <groups>
+      <group groupName="常规节点">
+        <node-res>
+          <node-res resId="8b93003447550210d0af73d4571917ed" clazz="org.chim.corelab.eurekacore.core.executor.node.general.JobExecutor" groupName="常规节点" nodeName="子作业" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/job_bg.png" midImage="res/image/support/nodeflow/bgs/job_bg.png" smallImage="res/image/support/nodeflow/bgs/job_bg.png"/>
+          <node-res resId="9d4eb50cea1d723f178842017b167186" clazz="org.chim.corelab.eurekacore.core.executor.node.general.TimerExecutor" groupName="常规节点" nodeName="延时器" configUrl="nodeConfigs/general/timerNodeConfig.jsp" bigImage="res/image/support/nodeflow/bgs/delay_bg.png" midImage="res/image/support/nodeflow/bgs/delay_bg.png" smallImage="res/image/support/nodeflow/bgs/delay_bg.png"/>
+          <node-res resId="0b38b3815dcfb197e27beb07abfa839a" clazz="org.chim.corelab.eurekacore.core.executor.node.io.FileExistedChecker" groupName="常规节点" nodeName="文件存在性" configUrl="nodeConfigs/general/timerNodeConfig.jsp" bigImage="res/image/support/nodeflow/bgs/file_existed_bg.png" midImage="res/image/support/nodeflow/bgs/file_existed_bg.png" smallImage="res/image/support/nodeflow/bgs/file_existed_bg.png"/>
+          <node-res resId="eaa9507a28899977a9e0ff68dc85cb69" clazz="org.chim.corelab.eurekacore.core.executor.node.general.SimpleBlockingExecutor" groupName="常规节点" nodeName="多路归并" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/aggregation_bg.png" midImage="res/image/support/nodeflow/bgs/aggregation_bg.png" smallImage="res/image/support/nodeflow/bgs/aggregation_bg.png"/>
+          <node-res resId="a64dedb830df0fd106814eba0510f4e4" clazz="org.chim.corelab.eurekacore.ext.extexecutor.ShellExecutor" groupName="常规节点" nodeName="Shell" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/shell_bg.png" midImage="res/image/support/nodeflow/bgs/shell_bg.png" smallImage="res/image/support/nodeflow/bgs/shell_bg.png"/>
+          <node-res resId="d2e59ea6e5d7a055786c2d7cc8c6993c" clazz="org.chim.corelab.eurekacore.ext.extexecutor.HttpExecutor" groupName="常规节点" nodeName="Http" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/http_bg.png" midImage="res/image/support/nodeflow/bgs/http_bg.png" smallImage="res/image/support/nodeflow/bgs/http_bg.png"/>
+          <node-res resId="0615004856693594ca717a35a87fc309" clazz="org.chim.corelab.eurekacore.ext.extexecutor.FlumeExecutor" groupName="常规节点" nodeName="Flume" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/flume_bg.png" midImage="res/image/support/nodeflow/bgs/flume_bg.png" smallImage="res/image/support/nodeflow/bgs/flume_bg.png"/>
+          <node-res resId="170b13093e09b468a7aeb3323fbddfb5" clazz="org.chim.corelab.eurekacore.ext.extexecutor.PersistenceExecutor" groupName="常规节点" nodeName="持久化" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/database_bg.png" midImage="res/image/support/nodeflow/bgs/database_bg.png" smallImage="res/image/support/nodeflow/bgs/database_bg.png"/>
+          <node-res resId="2191c36fd1fc336e7e0ef6681684e73b" clazz="org.chim.corelab.eurekacore.ext.extexecutor.RedisExecutor" groupName="常规节点" nodeName="Redis" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/redis_bg.png" midImage="res/image/support/nodeflow/bgs/redis_bg.png" smallImage="res/image/support/nodeflow/bgs/redis_bg.png"/>
+          <node-res resId="f6fa5a5c1ab15fb36b0491e010f9f8d5" clazz="org.chim.corelab.eurekacore.ext.extexecutor.RpcExecutor" groupName="常规节点" nodeName="RPC" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/rpc_interface_bg.png" midImage="res/image/support/nodeflow/bgs/rpc_interface_bg.png" smallImage="res/image/support/nodeflow/bgs/rpc_interface_bg.png"/>
+          <node-res resId="444fde15cfad083e96c59e798aaf2fcb" clazz="org.chim.corelab.eurekacore.ext.extexecutor.SysMsgExecutor" groupName="常规节点" nodeName="消息" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/sys_msg_bg.png" midImage="res/image/support/nodeflow/bgs/sys_msg_bg.png" smallImage="res/image/support/nodeflow/bgs/sys_msg_bg.png"/>
+          <node-res resId="62ce1018ef519e238a0cbf6c2192c4a6" clazz="org.chim.corelab.eurekacore.ext.extexecutor.MavenExecutor" groupName="常规节点" nodeName="Maven" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/maven_bg.png" midImage="res/image/support/nodeflow/bgs/maven_bg.png" smallImage="res/image/support/nodeflow/bgs/maven_bg.png"/>
+          <node-res resId="36f2a6692d85c1a23377b2d52eb09bbe" clazz="org.chim.corelab.eurekacore.core.executor.node.general.SimpleTriggerExecutor" groupName="常规节点" nodeName="触发事件" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/trigger_bg.png" midImage="res/image/support/nodeflow/bgs/trigger_bg.png" smallImage="res/image/support/nodeflow/bgs/trigger_bg.png"/>
+          <node-res resId="d769864523b36cf10e5720d539b834b3" clazz="org.chim.corelab.eurekacore.core.executor.node.general.SimpleEventExecutor" groupName="常规节点" nodeName="事件监听" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/event_bg.png" midImage="res/image/support/nodeflow/bgs/event_bg.png" smallImage="res/image/support/nodeflow/bgs/event_bg.png"/>
+          <node-res resId="e491c128a95d9c8922c7b9f7a4bbcd70" clazz="org.chim.corelab.eurekacore.core.executor.node.general.StartExecutor" groupName="常规节点" nodeName="开始节点" configUrl="nodeConfigs/general/startNodeConfig.jsp" bigImage="res/image/support/nodeflow/bgs/node-start.png" midImage="res/image/support/nodeflow/bgs/node-start.png" smallImage="res/image/support/nodeflow/bgs/node-start.png"/>
+          <node-res resId="150fac208e1514813b621a3d8eba4a6a" clazz="org.chim.corelab.eurekacore.core.executor.node.general.EndExecutor" groupName="常规节点" nodeName="结束节点" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/node-end.png" midImage="res/image/support/nodeflow/bgs/node-end.png" smallImage="res/image/support/nodeflow/bgs/node-end.png"/>
+        </node-res>
+      </group>
+      <group groupName="文件操作">
+        <node-res>
+          <node-res resId="a055befe99b8a7eed74283d9d9f1c590" clazz="org.chim.corelab.eurekacore.core.executor.node.io.FileCreateExecutor" groupName="文件操作" nodeName="创建文件夹" configUrl="http://www.baidu.com" bigImage="res/image/support/nodeflow/bgs/createFolder_bg.png" midImage="res/image/support/nodeflow/bgs/createFolder_bg.png" smallImage="res/image/support/nodeflow/bgs/createFolder_bg.png"/>
+        </node-res>
+      </group>
+    </groups>
+    <description text="节点资源配置"/>
+  </node-resources>
+  <log-config exeLogDir="/data/eureka/logs/exe/" sysLogDir="/data/eureka/logs/sys/"/>
+</eurekacore-site>

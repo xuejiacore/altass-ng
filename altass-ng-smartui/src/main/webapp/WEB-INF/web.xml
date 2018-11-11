@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <error-page>
+        <exception-type>org.chim.altass.base.exception.InvalidateParametersException</exception-type>
+        <location>/home/invalidateParamPage</location>
+    </error-page>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <!-- 用于动态获取web项目的根目录 -->
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>web.root</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.ico</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    </listener>
+    <!-- 获取web项目的根目录 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--框架级别的配置参数 2016-11-20 By Xuejia-->
+    <context-param>
+        <param-name>FrameworkConfigPath</param-name>
+        <param-value>classpath:framework.xml</param-value>
+    </context-param>
+    <!--
+    框架级别配置启用，该监听负责框架整体的基础配置参数，
+    包括一些子配置的支持等内容，该监听器应该在SpringListener之下，并且在其它之前
+    2016-11-20
+    -->
+    <listener>
+        <listener-class>org.chim.altass.smartui.listener.FrameworkListener</listener-class>
+    </listener>
+
+    <!--应用初始化监听器获取的参数-->
+    <context-param>
+        <param-name>APP_NAME</param-name>
+        <param-value>FRAMEWORK-CORE</param-value>
+    </context-param>
+    <!--应用初始化监听器-->
+    <listener>
+        <listener-class>org.chim.altass.base.AppInitialization</listener-class>
+    </listener>
+
+    <welcome-file-list>
+        <welcome-file>views/index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- UTF-8编码 -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- UTF-8编码 -->
+
+
+    <!-- expects the session timeout in minutes: -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>

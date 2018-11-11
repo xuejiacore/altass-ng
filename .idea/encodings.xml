@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-base" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-configuration" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-kafka-sink" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-rabbitmq-sink" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-http" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-maven" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-redis" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-rpc" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-shell" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-node" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-smartui" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-testing" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/altass-ng-toolkit" charset="UTF-8" />
+  </component>
+</project>

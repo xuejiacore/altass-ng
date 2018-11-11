@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="altass-executor-http" />
+        <module name="altass-executor-maven" />
+        <module name="altass-executor-redis" />
+        <module name="altass-executor-rpc" />
+        <module name="altass-executor-shell" />
+        <module name="altass-ng-base" />
+        <module name="altass-ng-configuration" />
+        <module name="altass-ng-core" />
+        <module name="altass-ng-node" />
+        <module name="altass-ng-smartui" />
+        <module name="altass-ng-testing" />
+        <module name="altass-ng-toolkit" />
+        <module name="flume-ng-altass-kafka-sink" />
+        <module name="flume-ng-altass-rabbitmq-sink" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="altass-executor-flume" target="1.8" />
+      <module name="altass-executor-http" target="1.8" />
+      <module name="altass-executor-maven" target="1.8" />
+      <module name="altass-executor-redis" target="1.8" />
+      <module name="altass-executor-rpc" target="1.8" />
+      <module name="altass-executor-shell" target="1.8" />
+      <module name="altass-ng" target="1.8" />
+      <module name="altass-ng-base" target="1.8" />
+      <module name="altass-ng-configuration" target="1.8" />
+      <module name="altass-ng-core" target="1.8" />
+      <module name="altass-ng-executor" target="1.8" />
+      <module name="altass-ng-executors" target="1.8" />
+      <module name="altass-ng-node" target="1.8" />
+      <module name="altass-ng-smartui" target="1.8" />
+      <module name="altass-ng-testing" target="1.8" />
+      <module name="altass-ng-toolkit" target="1.8" />
+      <module name="flume-ng-altass-kafka-sink" target="1.8" />
+      <module name="flume-ng-altass-rabbitmq-sink" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

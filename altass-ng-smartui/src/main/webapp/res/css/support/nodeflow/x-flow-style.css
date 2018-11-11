@@ -1,0 +1,81 @@
+::selection {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+::-moz-selection {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+::-webkit-selection {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+body {
+}
+
+/*
+节点绘制面板的样式
+*/
+/*===============================================面板START===============================================*/
+
+/*
+绘制面板
+*/
+.canvas-area {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border: 1px dashed #5e5e5e;
+    box-shadow: 0 2px 5px #5e5e5e;
+    background: url(../../../image/support/nodeflow/bgs/bg_grid_container.png) repeat;
+}
+
+/*
+工具箱
+*/
+.tool-box {
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.toolbox-shadow {
+    -webkit-box-shadow: 4px 1px 10px;
+    -moz-box-shadow: 4px 1px 10px;
+    box-shadow: 4px 1px 10px;
+}
+
+/*
+可滚动面板的右侧滚动条的位置
+*/
+.box-context-scroll {
+    padding: 0;
+    text-align: center;
+}
+
+/*
+工具栏区域
+*/
+.plumb-toolbar-area {
+    width: 100%;
+    height: 35px;
+    position: fixed;
+    top: 0px;
+    z-index: 1000;
+    background: #FCFCFC;
+    box-shadow: 0px 1px 10px;
+}
+
+/*
+工具栏列表
+*/
+.tool-list {
+    padding-top: 40px;
+}
+
+/*===============================================面板END===============================================*/
+
+/*===============================================可拖拽工具箱START===============================================*/
+
+/*===============================================可拖拽工具箱END===============================================*/
+

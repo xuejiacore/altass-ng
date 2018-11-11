@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 注册中心管理器Bean -->
+    <!--
+        允许指定runningMode为native或distribution参数，对应默认实现的本地方式运行以及分布式方式运行
+        也允许直接指定扩展的bean内容，如果自定义指定，那么runningMode的设置将为无效
+    -->
+    <bean id="centersManager" class="org.chim.altass.core.manager.CentersManager">
+
+        <!--
+            <property name="redissonConfig">
+                <bean class="org.chim.corelab.eurekacore.config.SingleRedissonConfig">
+                    <property name="address" value="172.18.254.28:19000"/>
+                    &lt;!&ndash;<property name="password" value="darkkidzxj29!*"/>&ndash;&gt;
+                </bean>
+            </property>
+        -->
+
+        <property name="runningMode" value="native"/>
+        <property name="assembleCenter">
+            <bean class="org.chim.altass.core.manager.AssembleCenter">
+                <property name="resources">
+                    <list>
+                        <value type="java.lang.String">classpath:res.images.node</value>
+                    </list>
+                </property>
+                <property name="output" value="classpath:/data/"/>
+            </bean>
+        </property>
+    </bean>
+
+    <context:annotation-config/>
+    <!-- 自动扫描的包 -->
+    <!--<context:component-scan base-package="org.zigui"/>-->
+</beans>

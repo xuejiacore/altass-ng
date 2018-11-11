@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cache name="shiro-activeSessionCache"
+   maxElementsInMemory="10000"
+   overflowToDisk="true"
+   eternal="true"
+   timeToLiveSeconds="1800"
+   timeToIdleSeconds="1800"
+   diskPersistent="false"
+   diskExpiryThreadIntervalSeconds="600"/>

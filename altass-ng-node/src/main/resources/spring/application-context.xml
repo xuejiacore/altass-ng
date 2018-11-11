@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="org.chim.altass.node"/>
+
+    <!-- 注册中心管理器Bean -->
+    <!--
+        允许指定runningMode为native或distribution参数，对应默认实现的本地方式运行以及分布式方式运行
+        也允许直接指定扩展的bean内容，如果自定义指定，那么runningMode的设置将为无效
+    -->
+    <bean id="centersManager" class="org.chim.altass.core.manager.CentersManager">
+        <property name="launchService" value="true"/>
+        <property name="runningMode" value="native"/>
+        <property name="assembleCenter">
+            <bean class="org.chim.altass.core.manager.AssembleCenter">
+                <property name="resources">
+                    <list>
+                        <value type="java.lang.String">classpath:res.images.node</value>
+                    </list>
+                </property>
+                <property name="output" value="classpath:/data/"/>
+            </bean>
+        </property>
+        <property name="executorListener">
+            <bean class="org.chim.altass.core.manager.ExecutorStatusPublisher"
+                  p:jedisPool-ref="jedisPool"/>
+        </property>
+    </bean>
+    <!-- redis连接池的配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <!-- redis的连接池pool，不是必选项：timeout/password  -->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1" value="${redis.host}" type="java.lang.String"/>
+        <constructor-arg index="2" value="${redis.port}" type="int"/>
+        <constructor-arg index="3" value="${redis.timeout}" type="int"/>
+        <!--<constructor-arg index="4" value="${redis.password}"/>-->
+    </bean>
+
+    <!-- 全局属性配置 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:redis.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <context:annotation-config/>
+</beans>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>altass-parent</artifactId>
+        <groupId>org.chim.altass</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>altass-ng-testing</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>Altass NG Testing</name>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-ng-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-ng-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-ng-node</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo-cluster</artifactId>
+            <version>2.6.1</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
+        <!-- Executor Testing Dependencies -->
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-executor-shell</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-executor-http</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-executor-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

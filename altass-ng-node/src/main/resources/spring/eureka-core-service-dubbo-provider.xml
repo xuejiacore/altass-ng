@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- provider's application name, used for tracing dependency relationship -->
+    <dubbo:application name="${eureka.service.id}"/>
+
+    <!-- use multicast registry center to export service -->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+    <!-- use dubbo protocol to export service on port 20880 -->
+    <dubbo:protocol name="dubbo" port="20880"/>
+
+    <!-- 配置RPC线程池 -->
+    <dubbo:provider timeout="5000" threadpool="fixed" threads="15" accepts="100"/>
+
+    <!-- service implementation, as same as regular local bean -->
+    <bean id="eurekaCoreRefService" class="org.chim.altass.node.impl.CoreService"/>
+    <bean id="eurekaRpcService" class="org.chim.altass.node.impl.RpcService"/>
+
+    <!-- declare the service interface to be exported -->
+    <dubbo:service interface="org.chim.altass.core.AltassNode" ref="eurekaCoreRefService"
+                   loadbalance="eureka"/>
+    <dubbo:service interface="org.chim.altass.core.AltassRpc" ref="eurekaRpcService"
+                   loadbalance="eureka"/>
+
+    <dubbo:reference id="_eurekaRpcService" protocol="dubbo" check="false"
+                     interface="org.chim.altass.core.AltassRpc"
+                     loadbalance="eureka" injvm="false"/>
+
+    <import resource="application-context.xml"/>
+</beans>

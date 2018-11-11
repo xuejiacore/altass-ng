@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.chim.altass</groupId>
+    <artifactId>altass-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Altass</name>
+    <description>Altass Next Gen</description>
+
+    <properties>
+        <altass.version>1.0.0-SNAPSHOT</altass.version>
+
+        <!-- Set default encoding to UTF-8 to remove maven complaints -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Java compiler configuration -->
+        <sourceJavaVersion>1.8</sourceJavaVersion>
+        <targetJavaVersion>1.8</targetJavaVersion>
+
+        <!-- defaults for flaky test and focused test exclusions -->
+        <test.exclude.pattern>$</test.exclude.pattern> <!-- junk pattern -->
+        <test.include.pattern>**/Test*.java</test.include.pattern>
+
+        <redisson.version>3.2.3</redisson.version>
+        <jedis.version>2.9.0</jedis.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
+        <apache.zookeeper.version>3.4.10</apache.zookeeper.version>
+        <apache.commons.lang.version>3.5</apache.commons.lang.version>
+        <apache.commons.io.version>2.5</apache.commons.io.version>
+        <apache.commons.configuration.version>2.1.1</apache.commons.configuration.version>
+        <apache.commons.beanutils.version>1.9.3</apache.commons.beanutils.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+        <test.junit.version>4.12</test.junit.version>
+
+        <!-- Ice 依赖升级最新 2017-07-29 12:54:49 -->
+        <zeroc.ice.version>3.7.0</zeroc.ice.version>
+        <aspectj.version>1.8.1</aspectj.version>
+        <google.guava.version>18.0</google.guava.version>
+        <commons-vfs2.version>2.0</commons-vfs2.version>
+        <commons-codec.version>1.9</commons-codec.version>
+        <jaxb-annotations.version>2.8.7</jaxb-annotations.version>
+        <dozer.version>5.5.1</dozer.version>
+        <commons-jexl.version>2.0</commons-jexl.version>
+        <paranamer.version>2.8</paranamer.version>
+        <hadoop.version>2.6.0</hadoop.version>
+        <hive.version>2.1.0</hive.version>
+        <httpasyncclient.version>4.1.2</httpasyncclient.version>
+        <fluent-hc.version>4.3.6</fluent-hc.version>
+        <httpcore-nio.version>4.4.5</httpcore-nio.version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <jackson-databind.version>2.8.4</jackson-databind.version>
+        <gson.version>2.3</gson.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <httpcore.version>4.4.6</httpcore.version>
+        <apache.flume.ng.version>1.9.0-SNAPSHOT</apache.flume.ng.version>
+        <kafka.version>0.9.0.1</kafka.version>
+    </properties>
+
+    <!-- Modules -->
+    <modules>
+        <module>altass-ng-core</module>
+        <module>altass-ng-base</module>
+        <module>altass-ng-configuration</module>
+        <module>altass-ng-node</module>
+        <module>altass-ng-executors</module>
+        <module>altass-ng-toolkit</module>
+        <module>altass-ng-testing</module>
+        <module>altass-ng-smartui</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- internal module dependencies -->
+
+            <dependency>
+                <groupId>org.chim.altass</groupId>
+                <artifactId>altass-ng-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.chim.altass</groupId>
+                <artifactId>altass-ng-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.chim.altass</groupId>
+                <artifactId>altass-ng-toolkit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.chim.altass</groupId>
+                <artifactId>altass-ng-node</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- 封装redis，分布式 -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <!-- redis client -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>0.10</version>
+            </dependency>
+
+            <!-- Dubbo -->
+            <!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>2.5.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>4.3.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>4.3.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>4.3.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>4.3.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-commons</artifactId>
+                <version>1.9.0.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.8.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.8.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.8.2</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.10.0</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.trilead/trilead-ssh2 -->
+            <dependency>
+                <groupId>com.trilead</groupId>
+                <artifactId>trilead-ssh2</artifactId>
+                <version>1.0.0-build221</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jaxen</groupId>
+                <artifactId>jaxen</artifactId>
+                <version>1.1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.8.7</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.11</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/junit/junit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${test.junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.0</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Quartz -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>2.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz-jobs</artifactId>
+                <version>2.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>3.2.4.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>1.4.10</version>
+            </dependency>
+
+            <!-- Apache依赖 -->
+            <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${apache.zookeeper.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.commons.lang.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache.commons.io.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${apache.commons.configuration.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${apache.commons.beanutils.version}</version>
+            </dependency>
+
+            <!-- 日志依赖 -->
+            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+
+            <!-- 分布式 服务 -->
+            <!-- https://mvnrepository.com/artifact/com.zeroc/ice -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>ice</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/glacier2 -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>glacier2</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/icegrid -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>icegrid</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/freeze -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>freeze</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/icebox -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>icebox</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/icelocatordiscovery -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>icelocatordiscovery</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/icediscovery -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>icediscovery</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.zeroc/icepatch2 -->
+            <dependency>
+                <groupId>com.zeroc</groupId>
+                <artifactId>icepatch2</artifactId>
+                <version>${zeroc.ice.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-vfs2</artifactId>
+                <version>${commons-vfs2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jaxb-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-jexl -->
+            <!--表达式引擎-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-jexl</artifactId>
+                <version>${commons-jexl.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.thoughtworks.paranamer/paranamer -->
+            <dependency>
+                <groupId>com.thoughtworks.paranamer</groupId>
+                <artifactId>paranamer</artifactId>
+                <version>${paranamer.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${httpcore.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore-nio</artifactId>
+                <version>${httpcore-nio.version}</version>
+            </dependency>
+            <!-- httpclient -->
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${fluent-hc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpasyncclient</artifactId>
+                <version>${httpasyncclient.version}</version>
+            </dependency>
+
+            <!-- BigData START-->
+            <!-- == == == == == == Hadoop Begin == == == == == == -->
+            <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-hdfs -->
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-hdfs</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+
+            <!-- == == == == == == Hadoop End == == == == == == -->
+
+
+            <!-- == == == == == == HIVE Begin == == == == == == -->
+            <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-common -->
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-common</artifactId>
+                <version>${hive.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc -->
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-jdbc</artifactId>
+                <version>${hive.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>5.0.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flume</groupId>
+                <artifactId>flume-ng-core</artifactId>
+                <version>${apache.flume.ng.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flume</groupId>
+                <artifactId>flume-ng-configuration</artifactId>
+                <version>${apache.flume.ng.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flume.flume-shared</groupId>
+                <artifactId>flume-shared-kafka</artifactId>
+                <version>${apache.flume.ng.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flume.flume-shared</groupId>
+                <artifactId>flume-shared-kafka-test</artifactId>
+                <version>${apache.flume.ng.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- 编译插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <configuration>
+                    <overWriteReleases>true</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <name>Chim</name>
+            <id>chim</id>
+            <email>xuejiacore@sina.com</email>
+            <organization>personal</organization>
+        </developer>
+    </developers>
+
+</project>
