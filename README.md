@@ -1,4 +1,12 @@
+
+![ ](https://img.shields.io/github/issues/xuejiacore/altass-ng.svg)
+![ ](https://img.shields.io/github/forks/xuejiacore/altass-ng.svg)
+![ ](https://img.shields.io/github/stars/xuejiacore/altass-ng.svg)
+![ ](https://img.shields.io/github/license/xuejiacore/altass-ng.svg)
+
 # Welcome to Altass Cluster!
+
+
 
 ## Documentation
 
