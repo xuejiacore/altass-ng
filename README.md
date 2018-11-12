@@ -17,11 +17,11 @@ Altass Cluster is open-sourced under the Apache Software Foundation License v2.0
 
 #### Architecture
 
-![](https://github.com/xuejiacore/altass-ng/tree/master/doc/images/screenshot_20181112_01.png)
+![](https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_01.png)
 
 Example:
 
-![](https://github.com/xuejiacore/altass-ng/tree/master/doc/images/screenshot_20181112_02.png)
+![](https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_02.png)
 
 #### Supported Components
 
