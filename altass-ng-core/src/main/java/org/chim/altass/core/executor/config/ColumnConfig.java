@@ -1,4 +1,4 @@
-package org.chim.altass.core.domain.buildin.attr;
+package org.chim.altass.core.executor.config;
 
 import java.util.List;
 

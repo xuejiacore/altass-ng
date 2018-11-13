@@ -7,7 +7,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.base.io.UniversalFileSystem;
 import org.chim.altass.core.constant.ExecutorAbility;
-import org.chim.altass.core.domain.buildin.attr.ColumnConfig;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;

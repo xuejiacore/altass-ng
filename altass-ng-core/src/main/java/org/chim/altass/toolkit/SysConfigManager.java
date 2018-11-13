@@ -3,7 +3,7 @@ package org.chim.altass.toolkit;
 
 import org.chim.altass.base.exception.XmlParserException;
 import org.chim.altass.base.parser.EXmlParser;
-import org.chim.altass.core.configuration.EurekaSiteConfiguration;
+import org.chim.altass.core.configuration.AltassSiteConfiguration;
 import org.chim.altass.core.configuration.GlobalVars;
 
 import java.io.IOException;
@@ -19,14 +19,14 @@ import java.io.IOException;
  */
 public class SysConfigManager {
 
-    private EurekaSiteConfiguration configuration = null;
+    private AltassSiteConfiguration configuration = null;
 
     private static SysConfigManager configManager = null;
 
     private SysConfigManager() {
         String xmlFilePath = GlobalVars.ETL_SITE_CONFIG_PATH;
         try {
-            configuration = EXmlParser.readFrom(xmlFilePath, EurekaSiteConfiguration.class);
+            configuration = EXmlParser.readFrom(xmlFilePath, AltassSiteConfiguration.class);
         } catch (XmlParserException | IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class SysConfigManager {
         return configManager;
     }
 
-    public EurekaSiteConfiguration getConfiguration() {
+    public AltassSiteConfiguration getConfiguration() {
         return configuration;
     }
 }

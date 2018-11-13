@@ -42,7 +42,7 @@ public class RunnableInitialization {
 
     private static void createEtlSite() throws XmlParserException, IOException {
         // 创建一个ETL-SITE配置
-        EurekaSiteConfiguration eurekaSiteConfiguration = new EurekaSiteConfiguration();
+        AltassSiteConfiguration eurekaSiteConfiguration = new AltassSiteConfiguration();
 
         // ------------------------>>  1、初始化节点资源配置
         NodeResources resources = new NodeResources();
@@ -143,7 +143,7 @@ public class RunnableInitialization {
 
         EXmlParser.writeTo(eurekaSiteConfiguration, GlobalVars.ETL_SITE_CONFIG_PATH);
         // ETL-SITE配置结束
-        EurekaSiteConfiguration siteConfiguration = EXmlParser.readFrom(GlobalVars.ETL_SITE_CONFIG_PATH, EurekaSiteConfiguration.class);
+        AltassSiteConfiguration siteConfiguration = EXmlParser.readFrom(GlobalVars.ETL_SITE_CONFIG_PATH, AltassSiteConfiguration.class);
 
         // ------------------------>>  2、
     }

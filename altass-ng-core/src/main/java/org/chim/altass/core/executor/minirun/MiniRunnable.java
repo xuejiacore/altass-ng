@@ -1,5 +1,9 @@
 package org.chim.altass.core.executor.minirun;
 
+import org.chim.altass.core.executor.config.ColumnConfig;
+import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
+import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
+import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
 import org.chim.altass.core.exception.ExecuteException;
 
 import java.util.Map;
@@ -35,6 +39,17 @@ public abstract class MiniRunnable {
      */
     protected DataCallback dataCallback = null;
 
+    protected StartNodeConfig startNodeConfig = null;
+
+    // File stream configuration
+    protected FileStreamConfig fileStreamConfig = null;
+
+    // Column split rule configuration
+    protected ColumnConfig columnConfig = null;
+
+    // Basic common stream configuration
+    protected CommonStreamConfig commonStreamConfig = null;
+
     public abstract void run() throws ExecuteException;
 
     public Map<String, Object> getRunParamMap() {
@@ -51,5 +66,37 @@ public abstract class MiniRunnable {
 
     public void setDataCallback(DataCallback dataCallback) {
         this.dataCallback = dataCallback;
+    }
+
+    public StartNodeConfig getStartNodeConfig() {
+        return startNodeConfig;
+    }
+
+    public void setStartNodeConfig(StartNodeConfig startNodeConfig) {
+        this.startNodeConfig = startNodeConfig;
+    }
+
+    public FileStreamConfig getFileStreamConfig() {
+        return fileStreamConfig;
+    }
+
+    public void setFileStreamConfig(FileStreamConfig fileStreamConfig) {
+        this.fileStreamConfig = fileStreamConfig;
+    }
+
+    public ColumnConfig getColumnConfig() {
+        return columnConfig;
+    }
+
+    public void setColumnConfig(ColumnConfig columnConfig) {
+        this.columnConfig = columnConfig;
+    }
+
+    public CommonStreamConfig getCommonStreamConfig() {
+        return commonStreamConfig;
+    }
+
+    public void setCommonStreamConfig(CommonStreamConfig commonStreamConfig) {
+        this.commonStreamConfig = commonStreamConfig;
     }
 }

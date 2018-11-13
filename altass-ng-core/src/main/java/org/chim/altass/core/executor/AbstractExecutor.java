@@ -10,16 +10,17 @@ package org.chim.altass.core.executor;
 import com.alibaba.fastjson.JSON;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.chim.altass.core.AltassRpc;
-import org.chim.altass.core.Lifecycle;
-import org.chim.altass.core.ansi.AnsiColor;
-import org.chim.altass.core.ansi.AnsiOutput;
 import org.chim.altass.base.exception.XmlParserException;
 import org.chim.altass.base.parser.EXmlParser;
 import org.chim.altass.base.script.Script;
 import org.chim.altass.base.utils.type.DateUtil;
 import org.chim.altass.base.utils.type.StringUtil;
-import org.chim.altass.core.configuration.EurekaSiteConfiguration;
+import org.chim.altass.core.AltassRpc;
+import org.chim.altass.core.Lifecycle;
+import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.ansi.AnsiColor;
+import org.chim.altass.core.ansi.AnsiOutput;
+import org.chim.altass.core.configuration.AltassSiteConfiguration;
 import org.chim.altass.core.configuration.NodeResource;
 import org.chim.altass.core.constant.EurekaSystemRedisKey;
 import org.chim.altass.core.constant.Event;
@@ -36,6 +37,7 @@ import org.chim.altass.core.domain.meta.OutputParam;
 import org.chim.altass.core.exception.BrokenExecutorException;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.exception.ExecutorRestoreExeception;
+import org.chim.altass.core.executor.config.CommonPattern;
 import org.chim.altass.core.executor.face.IEventListener;
 import org.chim.altass.core.executor.face.IExecutor;
 import org.chim.altass.core.executor.face.IExecutorListener;
@@ -70,66 +72,66 @@ import java.util.concurrent.TimeUnit;
 import static org.chim.altass.core.constant.ExecutorAttr.*;
 
 /**
- * Class Name: AbstractExecutor
- * Create Date: 2016/12/16 11:10
- * Creator: Xuejia
- * Version: v1.0
- * Updater:
- * Date Time:
- * Description:
- * <p>
- * 执行器抽象类
+ * Class Name: AbstractExecutor<br/>
+ * Create Date: 2016/12/16 11:10<br/>
+ * Creator: Xuejia<br/>
+ * Version: v1.0<br/>
+ * Updater:<br/>
+ * Date Time:<br/>
+ * Description:<br/>
+ * <p/>
+ * Base abstract executor, implemented from {@link java.lang.Runnable}, {@link org.chim.altass.core.Lifecycle},
+ * {@link org.chim.altass.core.executor.face.IEventListener} and {@link org.chim.altass.core.executor.face.IExecutor} that
+ * make executor could finish itself's lifecycle. Prepare build-in context or provide locker, running status, runtime
+ * variables and so on.
+ * <p/>
+ * Child extention must implement current abstract class to custom self business and features. Do not change this base
+ * executor if you not familiar with the whole flow and mechanism.
  */
 @SuppressWarnings({"unchecked", "WeakerAccess", "unused"})
 public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventListener, IExecutor {
 
     protected Logger logger = LogManager.getLogger(super.getClass());
     protected BufferedWriter executorLogger = null;
-    private NodeResource nodeResource = NodeResourceManager.getInstance().getResource((Class<? extends AbstractExecutor>) super.getClass());
-    private IExecutorListener executorListener = null;
-    private StatusInfo status = null;
-    protected static final EurekaSiteConfiguration ETL_SITE_CONFIG = SysConfigManager.getInstance().getConfiguration();
+    private NodeResource nodeResource = NodeResourceManager.getInstance()
+            .getResource((Class<? extends AbstractExecutor>) super.getClass());
+
+    protected static final AltassSiteConfiguration ETL_SITE_CONFIG = SysConfigManager.getInstance().getConfiguration();
     protected static final String EXECUTOR_LOG_DIR = ETL_SITE_CONFIG.getLogConfig().getExecutorLogDir();
 
-    /**
-     * 任务调度中心的实例，任务调度中心是所有任务执行器的核心部分，负责任务执行器的执行控制以及执行节点控制
-     * 任务调度中心实例由中心管理器配置管理，中心管理器的开销较大，以单例模式存在
-     */
     protected IMissionScheduleCenter missionScheduleCenter = CentersManager.getInstance().getMissionScheduleCenter();
     protected AltassRpc rpcService = CentersManager.getInstance().getRpcService();
-    private ExecutorPubSubListener<Object> eventListener = new ExecutorPubSubListener<Object>();
+    private ExecutorPubSubListener<Object> eventListener = new ExecutorPubSubListener<>();
 
-    //    // 常量标识定义开始
     public static final Integer STATUS_SUCCESS = 0x1;                           // 执行成功标识
     public static final Integer STATUS_FAILURE = 0x2;                           // 执行失败标识
-    /**
-     * 当前作业的下一个节点的可执行队列的
-     */
-    private static int WILL_EXEC_EXECUTOR_QUEUE_SIZE = 200;
-    // 常量标识定义结束
 
-    protected String executeId = null;                                          // 执行器的执行ID
+    private StatusInfo status;                                                  // 执行器执行状态
+    protected String executeId;                                                 // 执行器的执行ID
     protected String parentExecuteId = null;                                    // 父执行器
     protected HashMap<Object, Object> systemVariables = new HashMap<>();        // 系统变量
 
     protected ExecuteStatus currentNodeExecuteStatus = ExecuteStatus.FAILURE;   // 执行器的执行状态，默认为失败
     protected IEntry entry = null;                                              // 与当前执行器绑定的节点元素
 
-    protected ExecuteContext context = null;                                    // 节点的上下文信息
+    protected ExecuteContext context;                                           // 节点的上下文信息
     protected RCountDownLatch latch;                                            // 计数锁
-    private final RCountDownLatch runningCondition;
-    private RCountDownLatch controlCondition;
-    protected ArrayBlockingQueue<IEntry> willExecExecutor = new ArrayBlockingQueue<>(WILL_EXEC_EXECUTOR_QUEUE_SIZE);
-    private RedisPubSubConnection pubSubConnection = null;
+    private final RCountDownLatch runningCondition;                             // 执行器锁
+    private RCountDownLatch controlCondition;                                   // 执行调度锁，暂停等
+    protected ArrayBlockingQueue<IEntry> willExecExecutor;                      // 下一节点执行列表
+    private RedisPubSubConnection pubSubConnection = null;                      // 执行回调
+    private IExecutorListener executorListener = null;                          // 执行回调
 
     protected boolean ignoreError = false;                                      // 是否忽略错误
     protected boolean isSkipped = false;                                        // 跳过执行
     protected boolean isInterrupted = false;                                    // 中断
-    protected boolean isJob = false;                                            // 当前是否是作业
+    protected boolean isJob;                                                    // 当前是否是作业
     protected String jobId = null;                                              // 当前作业id
     protected Script script = null;                                             // 內建脚本解释器
-    protected RedissonToolkit distToolkit = null;                               // 分布式处理工具
+    protected RedissonToolkit distToolkit;                                      // 分布式处理工具
 
+    @RuntimeAutowired
+    private CommonPattern commonPattern = null;                                 // 基础通用配置
 
     /**
      * Initialize an Abstract-Executor with Execute Id
@@ -137,6 +139,9 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
      * @param executeId execute id
      */
     public AbstractExecutor(String executeId) throws ExecuteException {
+        // 当前作业的下一个节点的可执行队列的
+        int WILL_EXEC_EXECUTOR_QUEUE_SIZE = 200;
+        willExecExecutor = new ArrayBlockingQueue<>(WILL_EXEC_EXECUTOR_QUEUE_SIZE);
         this.executeId = executeId;
         // Clear Distribution Cached Object
         this.distToolkit = RedissonToolkit.getInstance();
@@ -327,7 +332,7 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
                 }
             }
         } catch (Exception e) {
-            if (!this.status.getStatusCode().equals(Status.ENTRY_STOPPED)) {
+            if (!this.status.getStatusCode().equals(Status.ENTRY_STOPPED.getStatusCode())) {
                 // 异常处理
                 EXECUTOR_LOGGER("msg", "Begin to process exception.",
                         "function", "onException()", "status", "START");
@@ -668,7 +673,7 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
         Class<? extends AbstractExecutor> executorClz = node.getExecutorClz();
 
         if (executorClz == null) {
-            throw new BrokenExecutorException("无法从当前ClassLoader中找到执行类：" + ((Entry) node).getExecutorClzName());
+            throw new BrokenExecutorException("无法从当前ClassLoader中找到执行类：" + node.getExecutorClzName());
         }
 
         if (AbstractBlockingExecutor.class.isAssignableFrom(executorClz)) {
@@ -1049,7 +1054,7 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
             if (logEntries.length == 0) {
                 return;
             }
-            Map<String, Object> logData = new HashMap<String, Object>();
+            Map<String, Object> logData = new HashMap<>();
             if (logEntries.length % 2 != 0) {
                 logData.put("msg", logEntries[0]);
             } else {
@@ -1208,7 +1213,7 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
      * @param entry 需要递归清楚运行状态的节点
      */
     private void recursiveCacheClear(IEntry entry) {
-        List<IEntry> entries = null;
+        List<IEntry> entries;
         entries = getCurrentJob().getEntries(entry.obtainPrecursors());
 
         if (entries == null)

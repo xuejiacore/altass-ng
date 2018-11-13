@@ -22,7 +22,7 @@ import org.chim.altass.base.parser.exml.anntation.Elem;
  * ETL资源配置实体
  */
 @Elem(alias = "eurekacore-site")
-public class EurekaSiteConfiguration {
+public class AltassSiteConfiguration {
     /**
      * 配置的版本号
      */

@@ -7,7 +7,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.base.io.UniversalFileSystem;
 import org.chim.altass.core.constant.ExecutorAbility;
-import org.chim.altass.core.domain.buildin.attr.ColumnConfig;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;
@@ -79,6 +79,7 @@ public class FileInputStreamExecutor extends AbstractPipelineExecutor {
      *
      * @throws ExecuteException -
      */
+    @SuppressWarnings("Duplicates")
     @Override
     protected void dataSource() throws ExecuteException {
         String line;
@@ -101,12 +102,12 @@ public class FileInputStreamExecutor extends AbstractPipelineExecutor {
                         // Map first line as column name mapping.
                         String textSeparator = commonStreamConfig.getTextSeparator();
                         String[] split = line.split(textSeparator);
-                        headerMap = new HashMap<Integer, String>();
+                        headerMap = new HashMap<>();
                         for (int i = 0; i < split.length; i++) {
                             headerMap.put(i, split[i]);
                         }
                         // prepare data mapping
-                        rowDataMap = new HashMap<String, Object>();
+                        rowDataMap = new HashMap<>();
                     }
                     continue;
                 }

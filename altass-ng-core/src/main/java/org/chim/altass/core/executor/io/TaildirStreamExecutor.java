@@ -8,7 +8,7 @@ import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.domain.buildin.attr.AHost;
 import org.chim.altass.core.domain.buildin.attr.ASSH;
-import org.chim.altass.core.domain.buildin.attr.ColumnConfig;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractPipelineExecutor;

@@ -14,6 +14,9 @@ import org.chim.altass.core.annotation.RuntimeAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.domain.IEntry;
+import org.chim.altass.core.executor.config.ColumnConfig;
+import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
+import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
@@ -44,6 +47,18 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
 
     @RuntimeAutowired
     private StartNodeConfig startNodeConfig = null;
+
+    // File stream configuration
+    @RuntimeAutowired
+    private FileStreamConfig fileStreamConfig = null;
+
+    // Column split rule configuration
+    @RuntimeAutowired
+    private ColumnConfig columnConfig = null;
+
+    // Basic common stream configuration
+    @RuntimeAutowired
+    private CommonStreamConfig commonStreamConfig = null;
 
     /**
      * 初始化一个节点执行器
@@ -103,6 +118,10 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
                                 MiniRunnable runnable = runnableClz.newInstance();
                                 runnable.setRunParamMap(startNodeConfig.getRunnableParamMap());
                                 runnable.setDataCallback(StartExecutor.this);
+                                runnable.setColumnConfig(columnConfig);
+                                runnable.setCommonStreamConfig(commonStreamConfig);
+                                runnable.setFileStreamConfig(fileStreamConfig);
+                                runnable.setStartNodeConfig(startNodeConfig);
                                 runnable.run();
                             }
                         }

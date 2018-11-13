@@ -1,7 +1,7 @@
 package org.chim.altass.testing.executor;
 
 import org.chim.altass.core.domain.Job;
-import org.chim.altass.core.domain.buildin.attr.ColumnConfig;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.domain.buildin.entry.Entry;

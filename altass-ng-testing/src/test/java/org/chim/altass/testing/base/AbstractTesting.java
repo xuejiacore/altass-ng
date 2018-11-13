@@ -6,10 +6,13 @@ import org.chim.altass.core.AltassNode;
 import org.chim.altass.core.constant.Status;
 import org.chim.altass.core.domain.IEntry;
 import org.chim.altass.core.domain.Job;
+import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
 import org.chim.altass.core.domain.buildin.entry.Entry;
 import org.chim.altass.core.exception.FlowDescException;
 import org.chim.altass.core.executor.general.JobExecutor;
+import org.chim.altass.core.executor.general.StartExecutor;
 import org.chim.altass.core.executor.io.FileOutputStreamExecutor;
+import org.chim.altass.core.executor.minirun.FileInputMiniRunnable;
 import org.chim.altass.toolkit.JDFWrapper;
 import org.redisson.client.RedisClient;
 import org.redisson.client.RedisPubSubConnection;
@@ -20,6 +23,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -103,6 +108,32 @@ public abstract class AbstractTesting {
         }
         pubSubConnection.subscribe(StringCodec.INSTANCE, entryId);
         return latch;
+    }
+
+    /**
+     * 流式化开始节点，以基础的文件流装饰
+     *
+     * @param startNode 开始节点
+     */
+    protected void streamingStartNode(Entry startNode) {
+        if (!StartExecutor.class.isAssignableFrom(startNode.getExecutorClz())) {
+            throw new IllegalArgumentException("目前只支持开始节点的流化");
+        }
+
+        // 开始节点的mini run配置
+        StartNodeConfig config = new StartNodeConfig();
+        // 选择文件输入配置
+        config.setRunnableClz(FileInputMiniRunnable.class);
+        // mini run 参数
+        Map<String, Object> runParam = new TreeMap<>();
+        runParam.put("filePath", "/data/eureka/collection_user.txt");
+        config.setRunnableParamMap(runParam);
+
+        // 内容流分割处理
+        startNode.addArg("startNodeConfig", config);
+        startNode.addJsonArg("fileStreamConfig", "{\"path\":\"D:/data/input_stream_data_source_demo.txt\"}");
+        startNode.addJsonArg("columnConfig", "{\"ignoreHeader\":false, \"containColumnName\":true}");
+        startNode.addJsonArg("commonStreamConfig", "{\"dataDivisible\":true}");
     }
 
     protected Entry newBaseFileOutputEntry(String path) {
