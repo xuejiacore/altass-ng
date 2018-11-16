@@ -6,6 +6,15 @@
 
 # Welcome to Altass Cluster!
 
+              _ _                     _____ _           _
+        /\   | | |                   / ____| |         | |
+       /  \  | | |_ __ _ ___ ___    | |    | |_   _ ___| |_ ___ _ __
+      / /\ \ | | __/ _` / __/ __|   | |    | | | | / __| __/ _ \ '__|
+     / ____ \| | || (_| \__ \__ \   | |____| | |_| \__ \ ||  __/ |
+    /_/    \_\_|\__\__,_|___/___/    \_____|_|\__,_|___/\__\___|_|
+      ::   J.Chim   ::
+
+
 Altass Cluster is a distributed, reliable, and available service for efficiently collecting, aggregating. It provided a
 powerful, flexible architecture based on streaming data flows. And support basic interaction with Apache Flume, Spring 
 Cloud. Provided many mature solutions through build-in components, such as redis node, http node, flume, rpc and so on.
