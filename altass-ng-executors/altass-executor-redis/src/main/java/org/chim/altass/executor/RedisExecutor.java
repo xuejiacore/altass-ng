@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.StringUtils;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.domain.meta.InputParam;
@@ -41,13 +41,13 @@ public class RedisExecutor extends AbstractStreamNodeExecutor {
     /**
      * redis connection configuration.
      */
-    @RuntimeAutowired
+    @AltassAutowired
     private RedisConfig redisConfig = null;
 
     /**
      * script content that will be execute.
      */
-    @RuntimeAutowired(analyzable = false)
+    @AltassAutowired(analyzable = false)
     private Scripts scripts = null;
 
     /**

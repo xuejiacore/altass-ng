@@ -11,13 +11,13 @@ import org.chim.altass.base.parser.exml.Meta;
 import org.chim.altass.base.parser.exml.anntation.Attr;
 import org.chim.altass.base.parser.exml.anntation.Elem;
 import org.chim.altass.core.constant.EurekaSystemRedisKey;
+import org.chim.altass.core.domain.buildin.attr.ARegion;
 import org.chim.altass.core.domain.buildin.entry.EndEntry;
 import org.chim.altass.core.domain.buildin.entry.Entries;
-import org.chim.altass.core.domain.connector.Connector;
-import org.chim.altass.core.domain.connector.Connectors;
-import org.chim.altass.core.domain.buildin.attr.ARegion;
 import org.chim.altass.core.domain.buildin.entry.Entry;
 import org.chim.altass.core.domain.buildin.entry.StartEntry;
+import org.chim.altass.core.domain.connector.Connector;
+import org.chim.altass.core.domain.connector.Connectors;
 import org.chim.altass.core.exception.FlowDescException;
 import org.chim.altass.core.executor.general.JobExecutor;
 import org.chim.altass.toolkit.RedissonToolkit;
@@ -372,20 +372,49 @@ public class Job extends Entry implements Cloneable {
     }
 
     /**
+     * Link entry one by one such as link list.
+     *
+     * @param src    the head of a link
+     * @param toNext some entry will be linked after src
+     * @return true if link success, else false
+     */
+    public boolean link(Entry src, Entry... toNext) {
+        if (this.connectors == null) {
+            this.connectors = new Connectors();
+        }
+
+        if (toNext == null || toNext.length == 0) {
+            return false;
+        }
+
+        Entry current = src;
+        for (Entry nextEntry : toNext) {
+            checkAndPutEntry(current);
+            connect(current, nextEntry);
+            current = nextEntry;
+        }
+        return true;
+    }
+
+    private void checkAndPutEntry(IEntry... entries) {
+        for (IEntry entry : entries) {
+            if (!this.entryMap.containsKey(entry.getNodeId())) {
+                addEntry((Entry) entry);
+            }
+        }
+    }
+
+    /**
      * 添加连线
      *
      * @param connector 需要添加的连线实例
      * @return 如果连线成功，那么返回值为true，否则返回值为false
      */
-    public boolean addConnector(Connector connector) throws FlowDescException {
+    public boolean connect(Connector connector) throws FlowDescException {
         if (this.connectors == null) {
             this.connectors = new Connectors();
         }
-        try {
-            return this.connectors.addConnector(connector);
-        } catch (FlowDescException e) {
-            throw e;
-        }
+        return this.connectors.addConnector(connector);
     }
 
     /**
@@ -396,8 +425,9 @@ public class Job extends Entry implements Cloneable {
      * @return 如果连接成功，返回值为true，否则返回值为false
      * @throws FlowDescException
      */
-    public boolean addConnector(IEntry srcEntry, IEntry destEntry) throws FlowDescException {
-        return addConnector(new Connector(srcEntry, destEntry));
+    public boolean connect(IEntry srcEntry, IEntry destEntry) throws FlowDescException {
+        checkAndPutEntry(srcEntry, destEntry);
+        return connect(new Connector(srcEntry, destEntry));
     }
 
     /**
@@ -408,8 +438,9 @@ public class Job extends Entry implements Cloneable {
      * @return 如果连接成功，返回值为true，否则返回值为false
      * @throws FlowDescException
      */
-    public boolean addConnector(IEntry srcEntry, IEntry destEntry, String connectId) throws FlowDescException {
-        return addConnector(new Connector(srcEntry, destEntry, connectId));
+    public boolean connect(IEntry srcEntry, IEntry destEntry, String connectId) throws FlowDescException {
+        checkAndPutEntry(srcEntry, destEntry);
+        return connect(new Connector(srcEntry, destEntry, connectId));
     }
 
     /**
@@ -421,10 +452,11 @@ public class Job extends Entry implements Cloneable {
      * @return 如果连线成功，返回值为true，否则返回值为false
      * @throws FlowDescException
      */
-    public boolean addConnector(Entry srcEntry, Entry destEntry, Integer connectType) throws FlowDescException {
+    public boolean connect(Entry srcEntry, Entry destEntry, Integer connectType) throws FlowDescException {
+        checkAndPutEntry(srcEntry, destEntry);
         Connector connector = new Connector(srcEntry, destEntry);
         connector.setConnectType(connectType);
-        return addConnector(connector);
+        return connect(connector);
     }
 
     /**

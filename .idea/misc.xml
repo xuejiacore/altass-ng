@@ -7,6 +7,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/altass-ng-executors/altass-executor-jdbc/pom.xml" />
+        <option value="$PROJECT_DIR$/altass-ng-executors/altass-executor-hbase/pom.xml" />
+        <option value="$PROJECT_DIR$/altass-ng-datasource/pom.xml" />
+        <option value="$PROJECT_DIR$/altass-ng-datasource/datasource-jdbc/pom.xml" />
+        <option value="$PROJECT_DIR$/altass-ng-datasource/datasource-hbase/pom.xml" />
       </list>
     </option>
   </component>

@@ -2,7 +2,7 @@ package org.chim.altass.core.executor.io;
 
 import com.jcraft.jsch.JSchException;
 import org.chim.altass.core.constant.StreamData;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
@@ -39,17 +39,17 @@ import java.util.Map;
         pageUrl = "nodeConfigs/core/tailInputStreamNodeConfig.jsp")
 public class TaildirStreamExecutor extends AbstractPipelineExecutor implements SSHTerminal.TerminalListener {
 
-    @RuntimeAutowired
+    @AltassAutowired
     private ASSH ssh = null;
 
     private SSHTerminal sshTerminal = null;
 
     // Column split rule configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private ColumnConfig columnConfig = null;
 
     // Basic common stream configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private CommonStreamConfig commonStreamConfig = null;
 
     /**

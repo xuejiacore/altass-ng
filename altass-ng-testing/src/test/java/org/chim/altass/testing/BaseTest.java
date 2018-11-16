@@ -52,13 +52,13 @@ public class BaseTest extends AbstractTesting {
             debugEntryB.addJsonArg(DebugConfig.class, "{\"delay\":\"4\"}");
             job.addEntry(debugEntryC);
 
-            job.addConnector(start, debugEntryA);
-            job.addConnector(start, debugEntryB);
-            job.addConnector(debugEntryB, debugEntryB1);
-            job.addConnector(debugEntryA, blockA);
-            job.addConnector(debugEntryB1, blockA);
-            job.addConnector(blockA, debugEntryC);
-            job.addConnector(debugEntryC, end);
+            job.connect(start, debugEntryA);
+            job.connect(start, debugEntryB);
+            job.connect(debugEntryB, debugEntryB1);
+            job.connect(debugEntryA, blockA);
+            job.connect(debugEntryB1, blockA);
+            job.connect(blockA, debugEntryC);
+            job.connect(debugEntryC, end);
         }
     }
 }

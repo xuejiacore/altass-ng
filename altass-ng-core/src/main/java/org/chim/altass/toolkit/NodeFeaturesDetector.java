@@ -3,9 +3,8 @@ package org.chim.altass.toolkit;
 import com.alibaba.fastjson.JSON;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
-import org.chim.altass.core.executor.io.FileInputStreamExecutor;
 import org.chim.altass.core.executor.io.FileOutputStreamExecutor;
 
 import java.lang.reflect.Field;
@@ -54,7 +53,7 @@ public class NodeFeaturesDetector {
         Field[] declaredFields = clz.getDeclaredFields();
         Map<String, Object> configs = new TreeMap<>();
         for (Field declaredField : declaredFields) {
-            RuntimeAutowired annotation = declaredField.getAnnotation(RuntimeAutowired.class);
+            AltassAutowired annotation = declaredField.getAnnotation(AltassAutowired.class);
             if (annotation != null) {
                 Map<String, Object> info = new TreeMap<>();
                 info.put("required", annotation.required());

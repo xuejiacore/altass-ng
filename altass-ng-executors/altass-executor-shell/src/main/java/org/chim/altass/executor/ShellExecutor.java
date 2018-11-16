@@ -3,7 +3,7 @@ package org.chim.altass.executor;
 import com.trilead.ssh2.Connection;
 import com.trilead.ssh2.Session;
 import com.trilead.ssh2.StreamGobbler;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.domain.buildin.attr.AHost;
@@ -51,7 +51,7 @@ public class ShellExecutor extends AbstractNodeExecutor {
     /**
      * SSH 操作指令
      */
-    @RuntimeAutowired
+    @AltassAutowired
     private ASSH ssh = null;
 
     /**

@@ -54,10 +54,10 @@ public class ShellExecutorTest extends AbstractTesting {
             debugEntry.setExecutorClz(DebugExecutor.class);
             job.addEntry(debugEntry);
 
-            job.addConnector(startNode, paramReducer);
-            job.addConnector(paramReducer, shellEntry);
-            job.addConnector(shellEntry, debugEntry);
-            job.addConnector(debugEntry, endNode);
+            job.connect(startNode, paramReducer);
+            job.connect(paramReducer, shellEntry);
+            job.connect(shellEntry, debugEntry);
+            job.connect(debugEntry, endNode);
         }
     }
 }

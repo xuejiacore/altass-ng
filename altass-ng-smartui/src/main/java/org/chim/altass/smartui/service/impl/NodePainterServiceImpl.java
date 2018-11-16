@@ -161,7 +161,7 @@ public class NodePainterServiceImpl implements INodePainterService {
         IEntry targetEntry = job.getEntry(targetId);
         boolean result;
         try {
-            result = job.addConnector(srcEntry, targetEntry);
+            result = job.connect(srcEntry, targetEntry);
             System.err.println(EXmlParser.toXmlPretty(job));
         } catch (XmlParserException e) {
             return false;

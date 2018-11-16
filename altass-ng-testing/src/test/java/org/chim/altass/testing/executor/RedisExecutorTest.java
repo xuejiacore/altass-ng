@@ -3,7 +3,6 @@ package org.chim.altass.testing.executor;
 import org.chim.altass.core.domain.Job;
 import org.chim.altass.core.domain.buildin.entry.Entry;
 import org.chim.altass.core.exception.FlowDescException;
-import org.chim.altass.core.executor.debug.DebugExecutor;
 import org.chim.altass.core.executor.debug.DebugStreamExecutor;
 import org.chim.altass.executor.RedisExecutor;
 import org.chim.altass.executor.redis.bean.RedisConfig;
@@ -54,9 +53,9 @@ public class RedisExecutorTest extends AbstractTesting {
             streamDebug.setExecutorClz(DebugStreamExecutor.class);
             job.addEntry(streamDebug);
 
-            job.addConnector(startNode, redis);
-            job.addConnector(redis, streamDebug);
-            job.addConnector(streamDebug, endNode);
+            job.connect(startNode, redis);
+            job.connect(redis, streamDebug);
+            job.connect(streamDebug, endNode);
         }
     }
 

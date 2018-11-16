@@ -17,9 +17,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="altass-executor-shell" scope="TEST" />
-    <orderEntry type="module" module-name="altass-executor-http" scope="TEST" />
-    <orderEntry type="module" module-name="altass-executor-redis" scope="TEST" />
     <orderEntry type="module" module-name="altass-ng-core" />
     <orderEntry type="module" module-name="altass-ng-toolkit" />
     <orderEntry type="module-library">
@@ -74,7 +71,7 @@
     <orderEntry type="module-library">
       <library name="Maven: jdk.tools:jdk.tools:1.6">
         <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/jdk/tools/jdk.tools/1.6/jdk.tools-1.6.jar!/" />
+          <root url="jar:///opt/java/jdk1.8.0_161/lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

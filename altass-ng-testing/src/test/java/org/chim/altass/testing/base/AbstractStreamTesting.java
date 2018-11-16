@@ -27,7 +27,7 @@ public abstract class AbstractStreamTesting extends AbstractTesting {
         inputStreamEntry.addJsonArg("columnConfig", getColumnConfig());
         inputStreamEntry.addJsonArg("commonStreamConfig", getCommonStreamConfig());
         job.addEntry(inputStreamEntry);
-        job.addConnector(startNode, inputStreamEntry);
+        job.connect(startNode, inputStreamEntry);
         this.streamExecutorDecorator(selector, job, inputStreamEntry, endNode);
         System.out.println("FileInputStream Initialized.");
     }

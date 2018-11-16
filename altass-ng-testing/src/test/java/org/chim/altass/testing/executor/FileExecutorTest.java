@@ -54,8 +54,8 @@ public class FileExecutorTest extends AbstractTesting {
         job.addEntry(inputStreamEntry);
         job.addEntry(outputStreamEntry);
 
-        job.addConnector(startNode, inputStreamEntry);
-        job.addConnector(outputStreamEntry, endNode);
+        job.connect(startNode, inputStreamEntry);
+        job.connect(outputStreamEntry, endNode);
     }
 
     private void generateSimpleFile(Job job, Entry start, Entry end) {
@@ -72,8 +72,8 @@ public class FileExecutorTest extends AbstractTesting {
         job.addEntry(inputStreamEntry);
         job.addEntry(outputStreamEntry);
 
-        job.addConnector(start, inputStreamEntry);
-        job.addConnector(inputStreamEntry, outputStreamEntry);
-        job.addConnector(outputStreamEntry, end);
+        job.connect(start, inputStreamEntry);
+        job.connect(inputStreamEntry, outputStreamEntry);
+        job.connect(outputStreamEntry, end);
     }
 }

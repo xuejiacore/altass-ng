@@ -10,7 +10,7 @@ package org.chim.altass.core.executor.general;
 
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.domain.IEntry;
@@ -45,19 +45,19 @@ import java.util.TimerTask;
 @Resource(name = "开始节点", clazz = StartExecutor.class, midImage = "res/images/node/node-start.png")
 public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRunnable.DataCallback {
 
-    @RuntimeAutowired
+    @AltassAutowired
     private StartNodeConfig startNodeConfig = null;
 
     // File stream configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private FileStreamConfig fileStreamConfig = null;
 
     // Column split rule configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private ColumnConfig columnConfig = null;
 
     // Basic common stream configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private CommonStreamConfig commonStreamConfig = null;
 
     /**

@@ -39,10 +39,10 @@ public class BaseStreamTesting extends AbstractStreamTesting {
         successorPipeline2.setExecutorClz(DebugStreamExecutor.class);
         job.addEntry(successorPipeline2);
 
-        job.addConnector(inputNode, successorPipeline1);
-        job.addConnector(inputNode, successorPipeline2);
+        job.connect(inputNode, successorPipeline1);
+        job.connect(inputNode, successorPipeline2);
 
-        job.addConnector(successorPipeline1, endNode);
-        job.addConnector(successorPipeline2, endNode);
+        job.connect(successorPipeline1, endNode);
+        job.connect(successorPipeline2, endNode);
     }
 }

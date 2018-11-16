@@ -2,7 +2,7 @@ package org.chim.altass.core.executor.debug;
 
 import com.alibaba.fastjson.JSON;
 import org.chim.altass.core.constant.StreamData;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.exception.ExecuteException;
@@ -25,7 +25,7 @@ import java.io.UnsupportedEncodingException;
 @Resource(name = "DebugStream", clazz = DebugStreamExecutor.class, midImage = "res/images/node/debug_bg.png", pageUrl = "nodeConfigs/debug/debugNodeConfig.jsp")
 public class DebugStreamExecutor extends AbstractStreamNodeExecutor {
 
-    @RuntimeAutowired
+    @AltassAutowired
     private DebugConfig debugConfig = null;
 
     private long beginTime = 0;

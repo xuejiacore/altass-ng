@@ -17,7 +17,7 @@ import org.chim.altass.base.utils.type.DateUtil;
 import org.chim.altass.base.utils.type.StringUtil;
 import org.chim.altass.core.AltassRpc;
 import org.chim.altass.core.Lifecycle;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.ansi.AnsiColor;
 import org.chim.altass.core.ansi.AnsiOutput;
 import org.chim.altass.core.configuration.AltassSiteConfiguration;
@@ -103,35 +103,35 @@ public abstract class AbstractExecutor implements Runnable, Lifecycle, IEventLis
     protected AltassRpc rpcService = CentersManager.getInstance().getRpcService();
     private ExecutorPubSubListener<Object> eventListener = new ExecutorPubSubListener<>();
 
-    public static final Integer STATUS_SUCCESS = 0x1;                           // 执行成功标识
-    public static final Integer STATUS_FAILURE = 0x2;                           // 执行失败标识
+    public static final Integer STATUS_SUCCESS = 0x1;                           // success status
+    public static final Integer STATUS_FAILURE = 0x2;                           // failure status
 
-    private StatusInfo status;                                                  // 执行器执行状态
-    protected String executeId;                                                 // 执行器的执行ID
-    protected String parentExecuteId = null;                                    // 父执行器
-    protected HashMap<Object, Object> systemVariables = new HashMap<>();        // 系统变量
+    private StatusInfo status;                                                  // the executor's status information
+    protected String executeId;                                                 // the executor's id
+    protected String parentExecuteId = null;                                    // executor's parent node
+    protected HashMap<Object, Object> systemVariables = new HashMap<>();        // system variables
 
-    protected ExecuteStatus currentNodeExecuteStatus = ExecuteStatus.FAILURE;   // 执行器的执行状态，默认为失败
-    protected IEntry entry = null;                                              // 与当前执行器绑定的节点元素
+    protected ExecuteStatus currentNodeExecuteStatus = ExecuteStatus.FAILURE;   // the executor's status, default is failure
+    protected IEntry entry = null;                                              // executor's entry information
 
-    protected ExecuteContext context;                                           // 节点的上下文信息
-    protected RCountDownLatch latch;                                            // 计数锁
-    private final RCountDownLatch runningCondition;                             // 执行器锁
-    private RCountDownLatch controlCondition;                                   // 执行调度锁，暂停等
-    protected ArrayBlockingQueue<IEntry> willExecExecutor;                      // 下一节点执行列表
-    private RedisPubSubConnection pubSubConnection = null;                      // 执行回调
-    private IExecutorListener executorListener = null;                          // 执行回调
+    protected ExecuteContext context;                                           // the context of current executor
+    protected RCountDownLatch latch;                                            // counter locker
+    private final RCountDownLatch runningCondition;                             // executor locker
+    private RCountDownLatch controlCondition;                                   // lifecycle locker
+    protected ArrayBlockingQueue<IEntry> willExecExecutor;                      // the next executor list that will be started
+    private RedisPubSubConnection pubSubConnection = null;                      // broadcast current executor's status or other information
+    private IExecutorListener executorListener = null;                          // callback of executor
 
-    protected boolean ignoreError = false;                                      // 是否忽略错误
-    protected boolean isSkipped = false;                                        // 跳过执行
-    protected boolean isInterrupted = false;                                    // 中断
-    protected boolean isJob;                                                    // 当前是否是作业
-    protected String jobId = null;                                              // 当前作业id
-    protected Script script = null;                                             // 內建脚本解释器
-    protected RedissonToolkit distToolkit;                                      // 分布式处理工具
+    protected boolean ignoreError = false;                                      // whether or not ignored errors
+    protected boolean isSkipped = false;                                        // whether or not skip this executor
+    protected boolean isInterrupted = false;                                    // whether or not interrupted
+    protected boolean isJob;                                                    // indicate current executor is job
+    protected String jobId = null;                                              // job's id of current executor
+    protected Script script = null;                                             // build-in script parser
+    protected RedissonToolkit distToolkit;                                      // distribute toolkit
 
-    @RuntimeAutowired
-    private CommonPattern commonPattern = null;                                 // 基础通用配置
+    @AltassAutowired
+    private CommonPattern commonPattern = null;                                 // base common pattern config
 
     /**
      * Initialize an Abstract-Executor with Execute Id

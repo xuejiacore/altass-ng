@@ -69,11 +69,11 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
     protected AbstractAltassChannel altassChannel = null;
 
     /**
-     * To initialized executor
+     * To initialize streaming executor.
      *
      * @param executeId execute id
      */
-    protected AbstractStreamNodeExecutor(String executeId) throws ExecuteException {
+    public AbstractStreamNodeExecutor(String executeId) throws ExecuteException {
         super(executeId);
         streamingInfo = new StreamingInfo();
         altassChannel = new AltassRabbitChannel(streamingInfo, new Transaction(this));

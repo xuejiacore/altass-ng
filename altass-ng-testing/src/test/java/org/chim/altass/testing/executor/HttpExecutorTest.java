@@ -72,10 +72,10 @@ public class HttpExecutorTest extends AbstractTesting {
         outputStreamEntry.addJsonArg("fileStreamConfig", "{\"path\":\"/data/eureka/output/http_response/mop_conf_resp.txt\"}");
         job.addEntry(outputStreamEntry);
 
-        job.addConnector(start, fileInput);
-        job.addConnector(fileInput, streamHttpEntry);
-        job.addConnector(streamHttpEntry, outputStreamEntry);
-        job.addConnector(outputStreamEntry, end);
+        job.connect(start, fileInput);
+        job.connect(fileInput, streamHttpEntry);
+        job.connect(streamHttpEntry, outputStreamEntry);
+        job.connect(outputStreamEntry, end);
     }
 
     private void generateSimpleHttpJob(Job job, Entry start, Entry end) {
@@ -88,7 +88,7 @@ public class HttpExecutorTest extends AbstractTesting {
 
         job.addEntry(entry);
 
-        job.addConnector(start, entry);
-        job.addConnector(entry, end);
+        job.connect(start, entry);
+        job.connect(entry, end);
     }
 }

@@ -27,13 +27,14 @@ Example:
 
 The Altass 1.x had supported some components list lower at flowing table.
 
-| Name | Description | Features | 
-| --- | --- | --- |
-| Debug | Base Debug Node | Basic |
-| DebugStream | Base Stream Debug Node | Stream, Distribution |
-| FileInput | Read and Output Data | Stream, Distribution |
-| Http | Accept Http Request | Stream, Distribution |
-| Redis | Execute Single or Batch Redis cmd | Stream, Distribution |
+| Name | Description | Features | Class |
+| --- | --- | --- | --- |
+| Debug | Base Debug Node | Basic | org.chim.altass.core.executor.debug.DebugExecutor |
+| DebugStream | Base Stream Debug Node | Stream, Distribution | org.chim.altass.core.executor.debug.DebugStreamExecutor |
+| FileInput | Read and Output Data | Stream, Distribution | org.chim.altass.core.executor.io.FileInputStreamExecutor |
+| Http | Accept Http Request | Stream, Distribution | org.chim.altass.executor.HttpExecutor |
+| Redis | Execute Single or Batch Redis cmd | Stream, Distribution | org.chim.altass.executor.RedisExecutor |
+| SequenceGenerator | To Generate Sequence | Pipeline | org.chim.altass.core.executor.toolkit.GenSequenceExecutor |
 
 #### How does a cluster work?
 

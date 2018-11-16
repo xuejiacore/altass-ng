@@ -2,7 +2,7 @@ package org.chim.altass.core.executor.io;
 
 
 import org.chim.altass.core.constant.StreamData;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.base.io.UniversalFileSystem;
@@ -38,15 +38,15 @@ import java.util.Map;
 public class FileInputStreamExecutor extends AbstractPipelineExecutor {
 
     // File stream configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private FileStreamConfig fileStreamConfig = null;
 
     // Column split rule configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private ColumnConfig columnConfig = null;
 
     // Basic common stream configuration
-    @RuntimeAutowired
+    @AltassAutowired
     private CommonStreamConfig commonStreamConfig = null;
 
     // Simple reader to read file content

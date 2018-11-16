@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.EurekaSystemRedisKey;
 import org.chim.altass.core.constant.ExecuteStatus;
 import org.chim.altass.core.domain.IEntry;
@@ -119,7 +119,7 @@ public abstract class AbstractNodeExecutor extends AbstractExecutor implements I
 
                 for (Field field : declaredFields) {
                     // recognize whether is Autowire field
-                    RuntimeAutowired autowire = field.getDeclaredAnnotation(RuntimeAutowired.class);
+                    AltassAutowired autowire = field.getDeclaredAnnotation(AltassAutowired.class);
                     Class<?> fieldType = field.getType();
                     if (autowire != null) {
                         Object dataSource = ((Entry) this.entry).getCommon();
@@ -147,16 +147,18 @@ public abstract class AbstractNodeExecutor extends AbstractExecutor implements I
                             if (attr instanceof JSONObject) {
 
                                 Object data = JSON.parseObject(((JSONObject) attr).toJSONString(), fieldType);
-                                boolean isPrivate = Modifier.isPrivate(fieldType.getModifiers());
+                                if (autowire.required() && data == null) {
+                                    throw new ExecuteException("parameter [" + parameterSimpleName + "] could not be null.");
+                                }
 
+                                EXECUTOR_LOGGER("Init Altass Autowired Field [" + parameterSimpleName + "]");
+                                boolean isPrivate = Modifier.isPrivate(fieldType.getModifiers());
+                                // Obtain data from entry default data source and set to executor's member.
                                 field.setAccessible(true);
                                 field.set(this, data);
                                 if (isPrivate) {
                                     field.setAccessible(false);
                                 }
-//                                Method setMethod = executorClz.getMethod("set" + parameterSimpleName, fieldType);
-                                // Obtain data from entry default data source and set to executor's member.
-//                                setMethod.invoke(this, data);
                             }
 
                         }

@@ -59,10 +59,10 @@ public class RedisExecutorStreamTest extends AbstractStreamTesting {
         Entry fileOutput = newBaseFileOutputEntry("/data/altass/executor/redis/output.txt");
         job.addEntry(fileOutput);
 
-        job.addConnector(inputNode, redis);
-        job.addConnector(redis, fileOutput);
+        job.connect(inputNode, redis);
+        job.connect(redis, fileOutput);
 
-        job.addConnector(fileOutput, endNode);
+        job.connect(fileOutput, endNode);
     }
 
     private void generateRedisBase(Job job, Entry inputNode, Entry endNode) {
@@ -81,9 +81,9 @@ public class RedisExecutorStreamTest extends AbstractStreamTesting {
         redis.addArg("scripts", scripts);
         job.addEntry(redis);
 
-        job.addConnector(inputNode, redis);
+        job.connect(inputNode, redis);
 
-        job.addConnector(redis, endNode);
+        job.connect(redis, endNode);
     }
 
 }

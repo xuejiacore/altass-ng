@@ -23,6 +23,8 @@
         <module>altass-executor-redis</module>
         <module>altass-executor-rpc</module>
         <module>altass-executor-shell</module>
+        <module>altass-executor-jdbc</module>
+        <module>altass-executor-hbase</module>
     </modules>
 
 

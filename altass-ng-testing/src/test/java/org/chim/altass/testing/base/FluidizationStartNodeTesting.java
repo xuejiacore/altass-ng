@@ -43,8 +43,8 @@ public class FluidizationStartNodeTesting extends AbstractTesting {
             streamNode.setExecutorClz(DebugStreamExecutor.class);
             job.addEntry(streamNode);
 
-            job.addConnector(startNode, streamNode);
-            job.addConnector(streamNode, endNode);
+            job.connect(startNode, streamNode);
+            job.connect(streamNode, endNode);
         }
     }
 }

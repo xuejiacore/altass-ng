@@ -2,7 +2,7 @@ package org.chim.altass.executor.flume;
 
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.exception.ExecuteException;
@@ -28,7 +28,7 @@ import javax.transaction.NotSupportedException;
 @Resource(name = "Flume", clazz = FlumeExecutor.class, midImage = "res/images/executor/flume_bg.png", pageUrl = "nodeConfigs/ext/flumeNodeConfig.jsp")
 public class FlumeExecutor extends AbstractStreamNodeExecutor {
 
-    @RuntimeAutowired
+    @AltassAutowired
     private FlumeConfig flumeConfig = null;
 
     /**

@@ -6,7 +6,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
@@ -49,10 +49,10 @@ public class HttpExecutor extends AbstractStreamNodeExecutor {
     /**
      * Http 请求所需要的参数，包括 Http Parameters、 Method、 Header、 Data Type 等请求基础配置
      */
-    @RuntimeAutowired
+    @AltassAutowired
     private HttpConfig httpConfig = null;
 
-    @RuntimeAutowired
+    @AltassAutowired
     private CommonStreamConfig commonStreamConfig = null;
 
     /**

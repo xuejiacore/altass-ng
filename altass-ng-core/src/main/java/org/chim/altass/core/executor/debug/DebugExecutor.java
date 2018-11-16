@@ -1,7 +1,7 @@
 package org.chim.altass.core.executor.debug;
 
 import com.alibaba.fastjson.JSON;
-import org.chim.altass.core.annotation.RuntimeAutowired;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.base.exception.XmlParserException;
@@ -30,7 +30,7 @@ import java.util.Map;
 @Resource(name = "Debug", clazz = DebugExecutor.class, midImage = "res/images/node/debug_bg.png", pageUrl = "nodeConfigs/debug/debugNodeConfig.jsp")
 public class DebugExecutor extends AbstractNodeExecutor {
 
-    @RuntimeAutowired
+    @AltassAutowired
     private DebugConfig debugConfig = null;
 
     @Override

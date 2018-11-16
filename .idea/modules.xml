@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/altass-executor-flume.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/altass-executor-flume.iml" />
+      <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-hbase/altass-executor-hbase.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-hbase/altass-executor-hbase.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-http/altass-executor-http.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-http/altass-executor-http.iml" />
+      <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-jdbc/altass-executor-jdbc.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-jdbc/altass-executor-jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-maven/altass-executor-maven.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-maven/altass-executor-maven.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-redis/altass-executor-redis.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-redis/altass-executor-redis.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-rpc/altass-executor-rpc.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-rpc/altass-executor-rpc.iml" />
@@ -12,11 +14,14 @@
       <module fileurl="file://$PROJECT_DIR$/altass-ng-base/altass-ng-base.iml" filepath="$PROJECT_DIR$/altass-ng-base/altass-ng-base.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-configuration/altass-ng-configuration.iml" filepath="$PROJECT_DIR$/altass-ng-configuration/altass-ng-configuration.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-core/altass-ng-core.iml" filepath="$PROJECT_DIR$/altass-ng-core/altass-ng-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/altass-ng-datasource/altass-ng-datasource.iml" filepath="$PROJECT_DIR$/altass-ng-datasource/altass-ng-datasource.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-ng-executors.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-ng-executors.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-node/altass-ng-node.iml" filepath="$PROJECT_DIR$/altass-ng-node/altass-ng-node.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-smartui/altass-ng-smartui.iml" filepath="$PROJECT_DIR$/altass-ng-smartui/altass-ng-smartui.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-testing/altass-ng-testing.iml" filepath="$PROJECT_DIR$/altass-ng-testing/altass-ng-testing.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-toolkit/altass-ng-toolkit.iml" filepath="$PROJECT_DIR$/altass-ng-toolkit/altass-ng-toolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/altass-ng-datasource/datasource-hbase/datasource-hbase.iml" filepath="$PROJECT_DIR$/altass-ng-datasource/datasource-hbase/datasource-hbase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/altass-ng-datasource/datasource-jdbc/datasource-jdbc.iml" filepath="$PROJECT_DIR$/altass-ng-datasource/datasource-jdbc/datasource-jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-kafka-sink/flume-ng-altass-kafka-sink.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-kafka-sink/flume-ng-altass-kafka-sink.iml" />
       <module fileurl="file://$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-rabbitmq-sink/flume-ng-altass-rabbitmq-sink.iml" filepath="$PROJECT_DIR$/altass-ng-executors/altass-executor-flume/flume-ng-altass-rabbitmq-sink/flume-ng-altass-rabbitmq-sink.iml" />
     </modules>
