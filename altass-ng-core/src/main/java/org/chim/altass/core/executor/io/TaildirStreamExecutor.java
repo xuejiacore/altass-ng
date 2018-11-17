@@ -70,6 +70,8 @@ public class TaildirStreamExecutor extends AbstractPipelineExecutor implements S
             sshTerminal.sendSignal("SIGINT");
         } catch (Exception e) {
             throw new ExecuteException(e);
+        } finally {
+            postFinished();
         }
     }
 

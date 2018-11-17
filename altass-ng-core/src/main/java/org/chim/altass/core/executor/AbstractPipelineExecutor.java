@@ -158,10 +158,9 @@ public abstract class AbstractPipelineExecutor extends AbstractStreamNodeExecuto
 
     @Deprecated
     @Override
-    public final StreamData onStreamProcessing(byte[] data) throws ExecuteException {
+    public final void onStreamProcessing(byte[] data) throws ExecuteException {
         // 管道流特性，不会流式处理上一个节点（上一个节点不能是流式节点）
         // 也就是当前节点是不可能进入当前方法的.
-        return null;
     }
 
     @Deprecated

@@ -36,7 +36,7 @@ public class FluidizationStartNodeTesting extends AbstractTesting {
             Map<String, Object> runParam = new TreeMap<>();
             runParam.put("filePath", "/data/eureka/logs/exe/20181111/20181111160535/StreamNode.log");
             config.setRunnableParamMap(runParam);
-            startNode.addArg("startNodeConfig", config);
+            startNode.inject("startNodeConfig", config);
 
             Entry streamNode = new Entry();
             streamNode.setNodeId("StreamNode");

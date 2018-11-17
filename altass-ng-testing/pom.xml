@@ -68,5 +68,12 @@
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.chim.altass</groupId>
+            <artifactId>altass-executor-jdbc</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

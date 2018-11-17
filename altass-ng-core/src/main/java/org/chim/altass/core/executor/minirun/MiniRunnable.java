@@ -1,10 +1,10 @@
 package org.chim.altass.core.executor.minirun;
 
-import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
 import org.chim.altass.core.exception.ExecuteException;
+import org.chim.altass.core.executor.config.ColumnConfig;
 
 import java.util.Map;
 

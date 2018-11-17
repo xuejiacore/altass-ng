@@ -1,18 +1,19 @@
 package org.chim.altass.core.executor.debug;
 
 import com.alibaba.fastjson.JSON;
+import org.chim.altass.base.exception.XmlParserException;
+import org.chim.altass.base.parser.EXmlParser;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.base.exception.XmlParserException;
-import org.chim.altass.base.parser.EXmlParser;
+import org.chim.altass.core.ansi.AnsiColor;
+import org.chim.altass.core.ansi.AnsiOutput;
 import org.chim.altass.core.domain.meta.InputParam;
 import org.chim.altass.core.domain.meta.MetaData;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
-
 
 import java.util.List;
 import java.util.Map;
@@ -95,13 +96,17 @@ public class DebugExecutor extends AbstractNodeExecutor {
                 int sec = (int) (delayTime / 1000);
                 int i = 0;
                 for (; i < sec; i++) {
-                    logger.trace("[" + this.entry.getNodeId() + "] - SIMULATION EXECUTIVE\t[" + (i + 1) + "000/" + debugConfig.getDelay() * 1000 + " ms]");
+                    logger.trace(AnsiOutput.toString(AnsiColor.BLUE,
+                            "[" + this.entry.getNodeId() + "] - SIMULATION EXECUTIVE\t[" +
+                                    (i + 1) + "000/" + debugConfig.getDelay() * 1000 + " ms]"));
                     Thread.sleep(1000);
                     this.statusChecking();
                 }
                 int remain = (int) (delayTime % 1000);
                 if (remain > 0) {
-                    logger.trace("[" + this.entry.getNodeId() + "] - SIMULATION EXECUTIVE\t[" + (i * 1000 + remain) + "/" + debugConfig.getDelay() * 1000 + " ms]");
+                    logger.trace(AnsiOutput.toString(AnsiColor.BLUE,
+                            "[" + this.entry.getNodeId() + "] - SIMULATION EXECUTIVE\t[" +
+                                    (i * 1000 + remain) + "/" + debugConfig.getDelay() * 1000 + " ms]"));
                     Thread.sleep(remain);
                 }
             } catch (InterruptedException e) {

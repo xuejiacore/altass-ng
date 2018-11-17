@@ -52,8 +52,8 @@ public class RedisExecutorStreamTest extends AbstractStreamTesting {
 
         Entry redis = new Entry("Redis");
         redis.setExecutorClz(RedisExecutor.class);
-        redis.addArg("redisConfig", redisConfig);
-        redis.addArg("scripts", scripts);
+        redis.inject("redisConfig", redisConfig);
+        redis.inject("scripts", scripts);
         job.addEntry(redis);
 
         Entry fileOutput = newBaseFileOutputEntry("/data/altass/executor/redis/output.txt");
@@ -77,8 +77,8 @@ public class RedisExecutorStreamTest extends AbstractStreamTesting {
 
         Entry redis = new Entry("Redis");
         redis.setExecutorClz(RedisExecutor.class);
-        redis.addArg("redisConfig", redisConfig);
-        redis.addArg("scripts", scripts);
+        redis.inject("redisConfig", redisConfig);
+        redis.inject("scripts", scripts);
         job.addEntry(redis);
 
         job.connect(inputNode, redis);

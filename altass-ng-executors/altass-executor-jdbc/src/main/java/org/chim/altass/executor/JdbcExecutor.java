@@ -1,5 +1,7 @@
 package org.chim.altass.executor;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.ibatis.session.SqlSession;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
@@ -8,9 +10,12 @@ import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
 import org.chim.altass.executor.jdbc.DataSourceConfig;
-import org.chim.altass.executor.jdbc.DataSourceManager;
 import org.chim.altass.executor.jdbc.SqlConfig;
+import org.chim.altass.executor.jdbc.SqlTool;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
+
+import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * Class Name: JdbcExecutor
@@ -31,7 +36,7 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
      * 数据源配置
      */
     @AltassAutowired
-    private DataSourceConfig dataSource = null;
+    private DataSourceConfig dataSourceConfig = null;
 
     /**
      * sql的运行配置
@@ -39,7 +44,7 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
     @AltassAutowired
     private SqlConfig sqlConfig = null;
 
-    private DataSourceManager dataSourceManager = null;
+    private SqlTool sqlTool = null;
 
     /**
      * To initialized executor
@@ -52,11 +57,19 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
 
     @Override
     protected boolean onChildInit() throws ExecuteException {
-        if (this.dataSource == null) {
+        if (this.dataSourceConfig == null) {
             throw new IllegalArgumentException("Not found data source configuration.");
         }
 
-        dataSourceManager = new DataSourceManager(this.dataSource, this.sqlConfig);
+        if (this.sqlConfig == null) {
+            throw new IllegalArgumentException("Not found sql configuration.");
+        }
+
+        // dataSource.setFilters(this.dataSourceConfig.getFilters());
+        sqlTool = new SqlTool(this.executeId, this.dataSourceConfig);
+
+        // prepare sql that will be execute
+        sqlTool.prepareSql(this.sqlConfig);
         return true;
     }
 
@@ -75,9 +88,32 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
-        return null;
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
+        StreamData streamData = transformData(data);
+        Map<String, Object> params = JSON.parseObject(String.valueOf(streamData.getData()), Map.class);
+
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = sqlTool.openSession();
+
+            sqlSession.select(this.executeId, params, context -> {
+                try {
+                    Object resultObject = context.getResultObject();
+                    pushData(new StreamData(this.executeId, null, resultObject));
+                } catch (ExecuteException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (SQLException e) {
+            throw new ExecuteException(e);
+        } finally {
+            if (sqlSession != null) {
+                sqlTool.close(sqlSession);
+            }
+            postFinished();
+        }
     }
 
     @Override

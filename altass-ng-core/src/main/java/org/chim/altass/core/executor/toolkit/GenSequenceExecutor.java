@@ -63,38 +63,50 @@ public class GenSequenceExecutor extends AbstractPipelineExecutor {
             Long end = simpleSequenceConfig.getEnd();
 
             String expression = simpleSequenceConfig.getExpression();
-            String outputExpression = simpleSequenceConfig.getOutputExpression();
+            String outputExpression = simpleSequenceConfig.getTransferExpress();
             boolean useExpress = StringUtils.isNotEmpty(expression);
             boolean useOutExpress = StringUtils.isNotEmpty(outputExpression);
 
-            Map<String, Object> runtimeParam = null;
+            Map<String, Object> runtimeParam = new HashMap<>();
             int index = 0;
-            if (useExpress) {
-                runtimeParam = new HashMap<>();
-            }
-
             for (Long s = start; s < end; s++) {
+                runtimeParam.put("index", index);
+                runtimeParam.put("val", s);
                 if (useExpress) {
-                    runtimeParam.put("index", index);
-                    runtimeParam.put("val", s);
                     Boolean isTrue = this.script.evaluateScript(expression, runtimeParam);
                     if (isTrue) {
-                        if (useOutExpress) {
-                            String result = this.script.evaluateScript(outputExpression, runtimeParam);
-                            pushData(new StreamData(this.executeId, null, result));
-                        } else {
-                            pushData(new StreamData(this.executeId, null, s));
-                        }
+                        evalToNext(outputExpression, useOutExpress, runtimeParam, s);
                     }
                 } else {
-                    pushData(new StreamData(this.executeId, null, s));
+                    evalToNext(outputExpression, useOutExpress, runtimeParam, s);
                 }
                 index++;
             }
 
         } else if (complexSequenceConfig != null) {
-
+            // TODO:
         }
+        postFinished();
+    }
+
+    /**
+     * 表达式计算获得传递到下级流节点的值
+     *
+     * @param outputExpression 解析表达式
+     * @param useOutExpress    是否使用表达式解析
+     * @param runtimeParam     运行参数
+     * @param s                实际值
+     */
+    private void evalToNext(String outputExpression, boolean useOutExpress, Map<String, Object> runtimeParam, Long s)
+            throws ExecuteException {
+
+        if (useOutExpress) {
+            String result = this.script.evaluateScript(outputExpression, runtimeParam);
+            runtimeParam.put("seq", result);
+        } else {
+            runtimeParam.put("seq", s);
+        }
+        pushData(new StreamData(this.executeId, null, runtimeParam));
     }
 
     @Override

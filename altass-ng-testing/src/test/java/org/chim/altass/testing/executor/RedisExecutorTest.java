@@ -45,8 +45,8 @@ public class RedisExecutorTest extends AbstractTesting {
 
             Entry redis = new Entry("RedisNode");
             redis.setExecutorClz(RedisExecutor.class);
-            redis.addArg("redisConfig", redisConfig);
-            redis.addArg("scripts", scripts);
+            redis.inject("redisConfig", redisConfig);
+            redis.inject("scripts", scripts);
             job.addEntry(redis);
 
             Entry streamDebug = new Entry("StreamDebug");

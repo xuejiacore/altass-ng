@@ -1,8 +1,8 @@
 package org.chim.altass.executor.flume;
 
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.exception.ExecuteException;
@@ -57,7 +57,7 @@ public class FlumeExecutor extends AbstractStreamNodeExecutor {
     }
 
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
 
         // 获取消费对象
 
@@ -65,7 +65,6 @@ public class FlumeExecutor extends AbstractStreamNodeExecutor {
 
         // 阻塞获取队列消息，需要进行加密验证，不允许所有的推送数据源都进入到后续的流程处理中
 
-        return null;
     }
 
     @Override

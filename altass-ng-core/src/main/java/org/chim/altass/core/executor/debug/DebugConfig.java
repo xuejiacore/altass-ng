@@ -14,8 +14,8 @@ public class DebugConfig {
     private String name = null;
     // 强制抛出异常
     private boolean throwError = false;
-    // 运行时长
-    private long delay = 2;
+    // 运行时长，默认300ms
+    private long delay = 300;
     // 异常描述
     private String exceptionDesc = null;
 

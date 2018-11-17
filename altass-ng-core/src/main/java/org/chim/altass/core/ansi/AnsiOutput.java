@@ -27,8 +27,8 @@ import org.springframework.util.Assert;
 public abstract class AnsiOutput {
 
 	public static void main(String[] args) {
-		System.out.println(AnsiOutput.toString(AnsiColor.MAGENTA,
-				"测试数据", AnsiColor.DEFAULT));
+		System.out.println(AnsiOutput.toString(AnsiColor.BLUE,
+				"测试数据"));
 	}
 
 	private static final String ENCODE_JOIN = ";";

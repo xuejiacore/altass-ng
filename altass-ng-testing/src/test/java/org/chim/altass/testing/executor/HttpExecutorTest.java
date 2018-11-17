@@ -61,7 +61,7 @@ public class HttpExecutorTest extends AbstractTesting {
         streamHttpEntry.setNodeId("STREAM-HTTP-TEST");
         streamHttpEntry.setExecutorClz(HttpExecutor.class);
 
-        streamHttpEntry.addArg("test", "testValue");
+        streamHttpEntry.inject("test", "testValue");
         streamHttpEntry.addJsonArg("httpConfig", "{\"method\":\"get\",\"url\":\"http://conf.mop.com/config/simple/common\",\"header\":{\"Content-Type\":\"application/json\",\"Cookies\":\"_mc=123g;_mu=123sfas\"},\"params\":{\"conf\":[\"${conf_name}\"]},\"dataType\":\"json\"}");
         job.addEntry(streamHttpEntry);
 
@@ -83,7 +83,7 @@ public class HttpExecutorTest extends AbstractTesting {
         entry.setNodeId("HTTP-TEST");
         entry.setExecutorClz(HttpExecutor.class);
 
-        entry.addArg("test", "testValue");
+        entry.inject("test", "testValue");
         entry.addJsonArg("httpConfig", "{\"method\":\"get\",\"url\":\"http://conf.mop.com/novelVersion/v1.0/getCloudConfig\",\"header\":{\"Content-Type\":\"application/json\",\"Cookies\":\"_mc=123g;_mu=123sfas\"},\"params\":{\"mobile\":[\"13621794081\"],\"item2\":[\"itemValue2\"]},\"dataType\":\"json\"}");
 
         job.addEntry(entry);

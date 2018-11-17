@@ -37,10 +37,9 @@ public interface IStream {
      * executor finished.
      *
      * @param data a json structure data from last streaming node.
-     * @return not null StreamData instance if process successful, otherwise return null to tag failure.
      * @throws ExecuteException Execute Exception
      */
-    StreamData onStreamProcessing(byte[] data) throws ExecuteException;
+    void onStreamProcessing(byte[] data) throws ExecuteException;
 
     /**
      * 如果isStreamProcessor判定不需要采用流式处理，那么该方法将会被执行，这是普通的执行方法，由于onNodeProcessing已经被

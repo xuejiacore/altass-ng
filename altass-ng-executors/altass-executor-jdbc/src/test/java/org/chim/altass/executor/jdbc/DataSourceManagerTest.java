@@ -15,19 +15,6 @@ public class DataSourceManagerTest {
 
     @Test
     public void testSqlRunner() {
-        DataSourceManager sourceManager = new DataSourceManager(new DataSourceConfig(), this.sqlConfig);
-        sourceManager.run(new SqlRunner() {
-
-            @Override
-            protected String getSql() {
-                return "select * from test_table;";
-            }
-
-            @Override
-            protected Object onDataReturn() {
-                return null;
-            }
-        });
     }
 
 }

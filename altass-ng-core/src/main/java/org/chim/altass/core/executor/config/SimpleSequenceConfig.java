@@ -20,7 +20,7 @@ public class SimpleSequenceConfig {
     // 表达式满足选择器
     private String expression = null;
     // 输出表达式
-    private String outputExpression = null;
+    private String transferExpress = null;
 
     public Long getStart() {
         return start;
@@ -46,11 +46,11 @@ public class SimpleSequenceConfig {
         this.expression = expression;
     }
 
-    public String getOutputExpression() {
-        return outputExpression;
+    public String getTransferExpress() {
+        return transferExpress;
     }
 
-    public void setOutputExpression(String outputExpression) {
-        this.outputExpression = outputExpression;
+    public void setTransferExpress(String transferExpress) {
+        this.transferExpress = transferExpress;
     }
 }

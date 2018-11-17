@@ -67,6 +67,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
     protected CountDownLatch streamLatch = null;
     protected StreamingInfo streamingInfo;
     protected AbstractAltassChannel altassChannel = null;
+    protected boolean previousIsFinished = false;
 
     /**
      * To initialize streaming executor.
@@ -165,6 +166,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
             this.foundStreamPrecursor();
         }
         streamingInfo.setPreviousRegion(allIsTheSameRegion);
+        previousIsFinished = !foundStreamPrecursor;
 
         for (IEntry entry : successorsEntries) {
             Class<? extends AbstractExecutor> executorClz = entry.getExecutorClz();
@@ -359,11 +361,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         altassChannel.publish(new StreamData(currentNodeId, "STARTED"));
         Thread.sleep(200);
 
-        ConcurrentMap<String, Integer> totalDataCntMap = new ConcurrentHashMap<String, Integer>();
-        boolean isSkip = false;
         while (true) {
-            StreamData streamData = null;
-
             byte[] body = altassChannel.receive();
             StreamData coveredData = JSON.parseObject(new String(body, "UTF-8"), StreamData.class);
 
@@ -384,8 +382,6 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
                     onStreamOpen(coveredData);                                         // 流打开事件
                 } else if (coveredData.getMsg().contains("FINISHED")) {
                     onStreamClose(coveredData);                                             // 流关闭事件
-                    totalDataCntMap.put(dataSrc, (Integer) coveredData.getData());          // 获得上级流式处理中输入的总数据量
-
                     /*
                      * 注意，此处释放的条件 count > 1 的原因是管道流的传输结束前，前驱数据流的推送输出能力远远高于当前节
                      * 点的处理消费能力，也就是数据流可能早已推送完成并已进入处理队列，流关闭事件较当前节点一般是提前量的
@@ -396,8 +392,18 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
                     if (streamLatch.getCount() > 1 && streamLatch != null) {
                         streamLatch.countDown();
                     }
+                    // 跳出之前需要把对应的数据队列需要手动删除
+                    altassChannel.close(dataSrc);
+                    if (streamingInfo.isPreviousRegion() && finallyLatch != null) {
+                        long count = finallyLatch.getCount();
+                        for (int i = 0; i < count - 1; i++) {
+                            finallyLatch.countDown();
+                        }
+                    }
+                    previousIsFinished = true;
+                    postFinished();
+                    break;
                 } else if (coveredData.getMsg().contains("SKIP")) {
-                    isSkip = true;
                 }
 
             } else if (coveredData.getHead().equalsIgnoreCase("DATA")) {
@@ -408,56 +414,12 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
                 // 处理流式数据核心方法，由子类负责实现处理逻辑，注意如果处理正常就必须返回一个非 null 的流数据对象
                 // 实例，以表示处理成功，后续流程将处理成功后的数据通过管道继续往后传递（如果当前节点的后继节点包含
                 // 有流式处理节点）
-                streamData = onStreamProcessing(body);
+                onStreamProcessing(body);
 
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
 
             }
-
-            if (streamData != null) {
-                // 子类流失处理成功，继续获取下一个管道数据
-                pushData(streamData);
-            } else {
-                // 子类流失处理失败，告诉管道数据生成方
-                if (retryIfFail()) {
-                    // 失败重试，将数据回退到管道流中，子类可以实现对应的重试原则，如重试次数等
-
-                    // TODO:回滚数据
-
-                }
-            }
-
-            Integer totalData = totalDataCntMap.get(dataSrc);
-            if (streamingInfo.isPreviousRegion()) {
-                totalData = 0;
-                for (Integer cnt : totalDataCntMap.values()) {
-                    if (cnt <= 0) {
-                        continue;
-                    }
-                    totalData += cnt;
-                }
-            }
-            if (isSkip || (totalData != null && totalData != 0 && streamingInfo.getDataPushCount() == totalData)) {
-                // 跳出之前需要把对应的数据队列需要手动删除
-                altassChannel.close(dataSrc);
-                if (streamingInfo.isPreviousRegion() && finallyLatch != null) {
-                    long count = finallyLatch.getCount();
-                    for (int i = 0; i < count - 1; i++) {
-                        finallyLatch.countDown();
-                    }
-                }
-                break;
-            }
-
-        }
-        if (streamingInfo.isDistributeNext()) {
-            for (IEntry entry : streamingInfo.getStreamSuccessorIdxMap().values()) {
-                Integer cnt = streamingInfo.getPushDataCntMap().get(entry.getNodeId());
-                altassChannel.publish(new StreamData(currentNodeId, "FINISHED", cnt));
-            }
-        } else {
-            altassChannel.publish(new StreamData(currentNodeId, "FINISHED", streamingInfo.getDataPushCount()));
         }
 
         this.onCurrentProcessFinished();
@@ -469,6 +431,19 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         // 释放 finallyLatch，允许直接后继启动运行
         if (finallyLatch != null) {
             finallyLatch.countDown();
+        }
+    }
+
+    protected void postFinished() {
+        if (previousIsFinished) {
+            if (streamingInfo.isDistributeNext()) {
+                for (IEntry entry : streamingInfo.getStreamSuccessorIdxMap().values()) {
+                    Integer cnt = streamingInfo.getPushDataCntMap().get(entry.getNodeId());
+                    altassChannel.publish(new StreamData(currentNodeId, "FINISHED", cnt));
+                }
+            } else {
+                altassChannel.publish(new StreamData(currentNodeId, "FINISHED", streamingInfo.getDataPushCount()));
+            }
         }
     }
 

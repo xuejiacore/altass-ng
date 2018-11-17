@@ -11,6 +11,7 @@ package org.chim.altass.executor.jdbc;
  */
 public class DataSourceConfig {
 
+    private String databaseId = null;
     private String url = null;
     private String username = null;
     private String password = null;
@@ -28,6 +29,14 @@ public class DataSourceConfig {
     private boolean keepAlive = true;
     private long phyMaxUseCount = 100000;
     private String filters = "stat";
+
+    public String getDatabaseId() {
+        return databaseId;
+    }
+
+    public void setDatabaseId(String databaseId) {
+        this.databaseId = databaseId;
+    }
 
     public String getUrl() {
         return url;

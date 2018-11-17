@@ -3,6 +3,7 @@ package org.chim.altass.testing.base;
 import org.chim.altass.core.domain.Job;
 import org.chim.altass.core.domain.buildin.entry.Entry;
 import org.chim.altass.core.exception.FlowDescException;
+import org.chim.altass.core.executor.debug.DebugExecutor;
 import org.chim.altass.core.executor.io.FileInputStreamExecutor;
 
 /**
@@ -20,6 +21,11 @@ public abstract class AbstractStreamTesting extends AbstractTesting {
 
     @Override
     public void executorDecorator(String selector, Job job, Entry startNode, Entry endNode) throws FlowDescException {
+
+        Entry debug = new Entry("DebugNode");
+        debug.setExecutorClz(DebugExecutor.class);
+        job.addEntry(debug);
+
         Entry inputStreamEntry = new Entry();
         inputStreamEntry.setNodeId("File-Input");
         inputStreamEntry.setExecutorClz(FileInputStreamExecutor.class);
@@ -27,7 +33,8 @@ public abstract class AbstractStreamTesting extends AbstractTesting {
         inputStreamEntry.addJsonArg("columnConfig", getColumnConfig());
         inputStreamEntry.addJsonArg("commonStreamConfig", getCommonStreamConfig());
         job.addEntry(inputStreamEntry);
-        job.connect(startNode, inputStreamEntry);
+        job.connect(startNode, debug);
+        job.connect(debug, inputStreamEntry);
         this.streamExecutorDecorator(selector, job, inputStreamEntry, endNode);
         System.out.println("FileInputStream Initialized.");
     }

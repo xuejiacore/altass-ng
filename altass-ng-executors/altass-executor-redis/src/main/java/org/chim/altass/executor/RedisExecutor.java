@@ -2,9 +2,9 @@ package org.chim.altass.executor;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang.StringUtils;
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.domain.meta.InputParam;
@@ -101,7 +101,7 @@ public class RedisExecutor extends AbstractStreamNodeExecutor {
 
     @Override
     @SuppressWarnings("unchecked")
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
         if (this.scripts == null || StringUtils.isBlank(this.scripts.getScript())) {
             throw new IllegalArgumentException("Redis Script Content Not Allowed Null.");
         }
@@ -112,9 +112,11 @@ public class RedisExecutor extends AbstractStreamNodeExecutor {
         try {
             Map<String, Object> runContext = redisScript.run(scripts.getScript(), params);
             runContext.putAll(params);
-            return new StreamData(this.executeId, null, runContext);
+            pushData(new StreamData(this.executeId, null, runContext));
         } catch (Exception e) {
             throw new ExecuteException(e);
+        } finally {
+            postFinished();
         }
     }
 

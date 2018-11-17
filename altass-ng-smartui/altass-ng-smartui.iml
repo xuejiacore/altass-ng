@@ -35,6 +35,11 @@
     <orderEntry type="module" module-name="altass-executor-shell" />
     <orderEntry type="library" name="Maven: com.trilead:trilead-ssh2:1.0.0-build221" level="project" />
     <orderEntry type="module" module-name="altass-executor-redis" />
+    <orderEntry type="module" module-name="altass-executor-jdbc" />
+    <orderEntry type="library" name="Maven: com.alibaba:druid:1.1.12" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.45" level="project" />
+    <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.2.2" level="project" />
+    <orderEntry type="module" module-name="datasource-jdbc" />
     <orderEntry type="library" name="Maven: com.alibaba:dubbo:2.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.20.0-GA" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.netty:netty:3.2.5.Final" level="project" />

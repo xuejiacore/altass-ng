@@ -2,6 +2,7 @@ package org.chim.altass.testing.base;
 
 import org.chim.altass.core.domain.Job;
 import org.chim.altass.core.domain.buildin.entry.Entry;
+import org.chim.altass.core.executor.debug.DebugExecutor;
 import org.chim.altass.core.executor.debug.DebugStreamExecutor;
 import org.junit.Test;
 

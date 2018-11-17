@@ -40,15 +40,15 @@ public class SequenceExecutorTesting extends AbstractTesting {
         // the start of sequence
         simpleSequenceConfig.setStart(0L);
         // the end of sequence
-        simpleSequenceConfig.setEnd(10L);
+        simpleSequenceConfig.setEnd(100L);
         // iterator condition
-        simpleSequenceConfig.setExpression("index % 2 == 1");
+//        simpleSequenceConfig.setExpression("index % 2 == 1");
         // concat iterator val
-        simpleSequenceConfig.setOutputExpression("'val=' + val");
+        simpleSequenceConfig.setTransferExpress("'val=' + val");
 
         Entry seqEntry = new Entry("SeqNode");
         seqEntry.setExecutorClz(GenSequenceExecutor.class);
-        seqEntry.addArg("simpleSequenceConfig", simpleSequenceConfig);
+        seqEntry.inject("simpleSequenceConfig", simpleSequenceConfig);
 
         Entry debugStream = new Entry("DebugStream");
         debugStream.setExecutorClz(DebugStreamExecutor.class);

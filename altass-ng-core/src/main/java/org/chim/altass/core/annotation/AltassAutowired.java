@@ -18,8 +18,8 @@ import java.lang.annotation.*;
  * {@link org.chim.altass.core.executor.AbstractExecutor} and {@link ACommon}
  * <p>
  * The executor will auto assemble the value which was annotated with this annotation.
- * {@link org.chim.altass.core.domain.buildin.entry.Entry#addArg(String, Object)} or
- * {@link org.chim.altass.core.domain.buildin.entry.Entry#addArg(Class, String)} and other useful method.
+ * {@link org.chim.altass.core.domain.buildin.entry.Entry#inject(String, Object)} or
+ * {@link org.chim.altass.core.domain.buildin.entry.Entry#inject(Class, String)} and other useful method.
  */
 @Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

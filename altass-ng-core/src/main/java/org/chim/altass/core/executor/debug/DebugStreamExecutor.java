@@ -1,10 +1,12 @@
 package org.chim.altass.core.executor.debug;
 
 import com.alibaba.fastjson.JSON;
-import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
+import org.chim.altass.core.ansi.AnsiColor;
+import org.chim.altass.core.ansi.AnsiOutput;
+import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
@@ -69,19 +71,21 @@ public class DebugStreamExecutor extends AbstractStreamNodeExecutor {
     }
 
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
-
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
         try {
             String dataStr = new String(data, "UTF-8");
 
-            Thread.sleep(debugConfig.getDelay() * 1000);
+            Thread.sleep(debugConfig.getDelay());
             StreamData streamData = JSON.parseObject(dataStr, StreamData.class);
 
-            System.err.println("DEBUG-DATA:\t" + Thread.currentThread().getName() + "\t" + this.getExecuteId() + "\t" + streamData.getData());
-
-            return new StreamData(this.getExecuteId(), null, streamData.getData());
+            String str = "DEBUG-DATA:\t" + Thread.currentThread().getName() + "\t" + this.getExecuteId() + "\t" + streamData.getData();
+            str = AnsiOutput.toString(AnsiColor.BLUE, str);
+            System.out.println(str);
+            pushData(new StreamData(this.getExecuteId(), null, streamData.getData()));
         } catch (UnsupportedEncodingException | InterruptedException e) {
             throw new ExecuteException(e);
+        } finally {
+            postFinished();
         }
     }
 

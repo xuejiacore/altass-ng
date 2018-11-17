@@ -45,10 +45,57 @@ The Altass 1.x had supported some components list lower at flowing table.
 | Http | Accept Http Request | Stream, Distribution | org.chim.altass.executor.HttpExecutor |
 | Redis | Execute Single or Batch Redis cmd | Stream, Distribution | org.chim.altass.executor.RedisExecutor |
 | SequenceGenerator | To Generate Sequence | Pipeline | org.chim.altass.core.executor.toolkit.GenSequenceExecutor |
+| JdbcExecutor | To Execute Basic Sql Scripts | Stream | org.chim.altass.executor.JdbcExecutor |
 
 #### How does a cluster work?
 
 Every node are single server for executor.
+
+##### AltassNode Init
+```java
+AltassNode altassNode;
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+    obtainXmlApplicationConfigLocation()
+);
+context.start();
+altassNode = context.getBean(AltassNode.class);
+```
+
+```java
+Job job = new Job("START", "END");
+job.setJobId(DateUtil.format(new Date(), DateUtil.SDFYYYYMMDD));
+job.setExecutorClz(JobExecutor.class);
+
+Entry debugEntryA = new Entry("DEBUG_A");
+debugEntryA.setExecutorClz(DebugExecutor.class);
+job.addEntry(debugEntryA);
+
+Entry debugEntryB = new Entry("DEBUG_B");
+debugEntryB.setExecutorClz(DebugExecutor.class);
+job.addEntry(debugEntryB);
+
+Entry debugEntryB1 = new Entry("DEBUG_B1");
+debugEntryB1.setExecutorClz(DebugExecutor.class);
+job.addEntry(debugEntryB1);
+
+Entry blockA = new Entry("Block");
+blockA.setExecutorClz(SimpleBlockingExecutor.class);
+job.addEntry(blockA);
+
+Entry debugEntryC = new Entry("DEBUG_C");
+debugEntryC.setExecutorClz(DebugExecutor.class);
+job.addEntry(debugEntryC);
+
+job.connect(start, debugEntryA);
+job.connect(start, debugEntryB);
+job.connect(debugEntryB, debugEntryB1);
+job.connect(debugEntryA, blockA);
+job.connect(debugEntryB1, blockA);
+job.connect(blockA, debugEntryC);
+job.connect(debugEntryC, end);
+
+altassNode.run(new JDFWrapper(job));
+```
 
 ## Contact us!
 

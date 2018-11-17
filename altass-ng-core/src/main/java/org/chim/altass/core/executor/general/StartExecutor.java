@@ -8,21 +8,21 @@
 package org.chim.altass.core.executor.general;
 
 
+import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
-import org.chim.altass.core.domain.IEntry;
-import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.executor.minirun.MiniRunnable;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,8 +90,8 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
     }
 
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
-        return new StreamData();
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -132,15 +132,7 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
 
                     streamLatch.countDown();
                     Thread.sleep(100);
-                    if (streamingInfo.isDistributeNext()) {
-                        for (IEntry successorEntry : streamingInfo.getStreamSuccessorIdxMap().values()) {
-                            Integer cnt = streamingInfo.getPushDataCntMap().get(successorEntry.getNodeId());
-                            altassChannel.publish(new StreamData(entry.getNodeId(), "FINISHED", cnt));
-                        }
-                    } else {
-                        int dataPushCount = streamingInfo.getDataPushCount();
-                        altassChannel.publish(new StreamData(entry.getNodeId(), "FINISHED", dataPushCount));
-                    }
+                    postFinished();
                 } catch (InterruptedException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }

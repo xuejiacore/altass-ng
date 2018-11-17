@@ -21,6 +21,7 @@ import org.chim.altass.executor.http.bean.HttpConfig;
 import org.chim.altass.executor.http.support.HttpClient;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
 
+import javax.transaction.NotSupportedException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +91,9 @@ public class HttpExecutor extends AbstractStreamNodeExecutor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
         // send process result to next streaming node if existed
-        StreamData toNextPipeline;
+        StreamData toNextPipeline = null;
 
         // receive stream data
         try {
@@ -121,19 +122,18 @@ public class HttpExecutor extends AbstractStreamNodeExecutor {
                 if ("JSON".equals(httpConfig.getDataType().toUpperCase())) {
                     toNextPipeline = new StreamData(((Entry) this.entry).getNodeId());
                     toNextPipeline.setData(JSON.parseObject(response, Map.class));
+                    pushData(toNextPipeline);
                 } else {
-                    return null;
+                    throw new NotSupportedException();
                 }
-
             } else {
                 throw new ExecuteException("Unsupported pipeline input data type. Map is allowed.");
             }
-
         } catch (Exception e) {
             throw new ExecuteException(e);
+        } finally {
+            postFinished();
         }
-
-        return toNextPipeline;
     }
 
     /**

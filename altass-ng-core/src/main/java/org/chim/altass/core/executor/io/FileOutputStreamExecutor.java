@@ -1,18 +1,18 @@
 package org.chim.altass.core.executor.io;
 
 import com.alibaba.fastjson.JSON;
-import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.base.io.UniversalFileSystem;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
-import org.chim.altass.base.io.UniversalFileSystem;
 import org.chim.altass.core.constant.ExecutorAbility;
-import org.chim.altass.core.executor.config.ColumnConfig;
+import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
 
 import java.io.BufferedWriter;
@@ -142,13 +142,14 @@ public class FileOutputStreamExecutor extends AbstractStreamNodeExecutor {
         try {
             writer.flush();
             writer.close();
+            postFinished();
         } catch (IOException e) {
             throw new ExecuteException(e);
         }
     }
 
     @Override
-    public StreamData onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(byte[] data) throws ExecuteException {
         try {
             String dataStr = new String(data, "UTF-8");
             EXECUTOR_LOGGER("msg", "Output Stream Data", "rowData", dataStr);
@@ -169,9 +170,11 @@ public class FileOutputStreamExecutor extends AbstractStreamNodeExecutor {
             }
         } catch (IOException e) {
             throw new ExecuteException(e);
+        } finally {
+            if (writer != null) {
+                postFinished();
+            }
         }
-
-        return new StreamData();
     }
 
     /**

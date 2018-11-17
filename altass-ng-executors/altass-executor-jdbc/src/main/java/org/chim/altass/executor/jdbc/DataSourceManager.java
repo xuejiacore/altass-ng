@@ -58,23 +58,6 @@ public class DataSourceManager {
     }
 
     /**
-     * 执行一个sql
-     *
-     * @param sqlRunner 需要执行的sql
-     */
-    public void run(SqlRunner sqlRunner) {
-        this.startTransaction();
-        try {
-            sqlRunner.onSqlRunner(container.get());
-            this.commit();
-        } catch (Exception e) {
-            this.rollback();
-        } finally {
-            this.close();
-        }
-    }
-
-    /**
      * 获取当前线程上的连接开启事务
      */
     public void startTransaction() {

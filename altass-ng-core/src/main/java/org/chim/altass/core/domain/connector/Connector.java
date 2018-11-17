@@ -116,7 +116,8 @@ public class Connector extends Element {
             throw new FlowDescException("连接的源和目标不允许为 null");
         } else if (AbstractStreamNodeExecutor.class.isAssignableFrom(source.getExecutorClz())
                 && AbstractPipelineExecutor.class.isAssignableFrom(target.getExecutorClz())) {
-            throw new FlowDescException("管道流节点直接前驱不支持流式节点. [Pipeline flow nodes do not support flow nodes directly.]");
+            throw new FlowDescException("管道流节点直接前驱不支持流式节点. [Pipeline flow nodes do not support flow nodes directly. " +
+                    "Found " + source.getExecutorClz() + "]");
         } else {
             if (source.equals(target)) {
                 throw new FlowDescException("连线:" + getClass().getName() + "不允许出现自环");

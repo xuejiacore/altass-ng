@@ -130,7 +130,7 @@ public abstract class AbstractTesting {
         config.setRunnableParamMap(runParam);
 
         // 内容流分割处理
-        startNode.addArg("startNodeConfig", config);
+        startNode.inject("startNodeConfig", config);
         startNode.addJsonArg("fileStreamConfig", "{\"path\":\"D:/data/input_stream_data_source_demo.txt\"}");
         startNode.addJsonArg("columnConfig", "{\"ignoreHeader\":false, \"containColumnName\":true}");
         startNode.addJsonArg("commonStreamConfig", "{\"dataDivisible\":true}");
@@ -144,7 +144,7 @@ public abstract class AbstractTesting {
         Entry outputStreamEntry = new Entry();
         outputStreamEntry.setNodeId(nodeId);
         outputStreamEntry.setExecutorClz(FileOutputStreamExecutor.class);
-        outputStreamEntry.addJsonArg("fileStreamConfig", "{\"path\":\"" + path + "\"}");
+        outputStreamEntry.addJsonArg("fileStreamConfig", "{\"path\":\"" + path + "\", \"flushLineCnt\": 1}");
         return outputStreamEntry;
     }
 

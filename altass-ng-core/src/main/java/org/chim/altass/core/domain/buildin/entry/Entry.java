@@ -318,14 +318,14 @@ public class Entry extends Node implements IEntry {
         }
     }
 
-    public void addArg(String key, Object val) {
+    public void inject(String key, Object val) {
         if (this.common == null) {
             this.common = new ACommon();
         }
         this.common.addAttr(key, val);
     }
 
-    public void addArg(Class<?> keyType, String json) {
+    public void inject(Class<?> keyType, String json) {
         if (this.common == null) {
             this.common = new ACommon();
         }

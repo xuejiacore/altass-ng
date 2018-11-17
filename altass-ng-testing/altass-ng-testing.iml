@@ -267,7 +267,6 @@
     <orderEntry type="library" name="Maven: com.github.pagehelper:pagehelper:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: com.github.jsqlparser:jsqlparser:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.8.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-1.2-api:2.10.0" level="project" />
     <orderEntry type="module" module-name="altass-ng-node" />
@@ -300,5 +299,11 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.trilead:trilead-ssh2:1.0.0-build221" level="project" />
     <orderEntry type="module" module-name="altass-executor-http" scope="TEST" />
     <orderEntry type="module" module-name="altass-executor-redis" scope="TEST" />
+    <orderEntry type="module" module-name="altass-executor-jdbc" scope="TEST" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.alibaba:druid:1.1.12" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.10.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: mysql:mysql-connector-java:5.1.45" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.mybatis:mybatis:3.2.2" level="project" />
+    <orderEntry type="module" module-name="datasource-jdbc" scope="TEST" />
   </component>
 </module>
