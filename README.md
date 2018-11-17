@@ -33,6 +33,12 @@ Example:
 
 <img width="100%" src="https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_02.png"/>
 
+<img width="100%" src="https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_03.png"/>
+
+<img width="100%" src="https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_04.png"/>
+
+<img width="100%" src="https://github.com/xuejiacore/altass-ng/blob/master/doc/images/screenshot_20181112_05.png"/>
+
 #### Supported Components
 
 The Altass 1.x had supported some components list lower at flowing table.
