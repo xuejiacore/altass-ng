@@ -129,9 +129,12 @@ public class Script {
      * @param <T>     返回类型
      * @return 返回表达式的执行结果
      */
+    @SuppressWarnings("unchecked")
     public <T> T evaluateScript(String script, Map<String, Object> context) {
         ScriptContext scriptContext = this.getScriptContext(context);
-        return this.evaluateScript(script, scriptContext);
+        Object o = this.evaluateScript(script, scriptContext);
+        context.putAll(((AltassScriptContext)scriptContext.getScriptContext()).valMapping());
+        return (T) o;
     }
 
     /*    *//**

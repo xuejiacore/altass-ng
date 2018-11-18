@@ -8,7 +8,6 @@
 package org.chim.altass.base.script;
 
 import org.apache.commons.jexl2.JexlContext;
-import org.apache.commons.jexl2.MapContext;
 
 /**
  * Class Name: ScriptContext
@@ -20,7 +19,8 @@ import org.apache.commons.jexl2.MapContext;
  * Description:
  */
 public class ScriptContext {
-    private final JexlContext scriptContext = new MapContext();
+
+    private final JexlContext scriptContext = new AltassScriptContext();
 
     public ScriptContext() {
     }

@@ -101,10 +101,11 @@ public class GenSequenceExecutor extends AbstractPipelineExecutor {
             throws ExecuteException {
 
         if (useOutExpress) {
-            String result = this.script.evaluateScript(outputExpression, runtimeParam);
-            runtimeParam.put("seq", result);
+            // 经过运算后的变量会以参数输出的形式处理
+            Object result = this.script.evaluateScript(outputExpression, runtimeParam);
+            runtimeParam.put("_final_result", result);
         } else {
-            runtimeParam.put("seq", s);
+            runtimeParam.put("_final_result", s);
         }
         pushData(new StreamData(this.executeId, null, runtimeParam));
     }

@@ -71,4 +71,11 @@ public @interface Resource {
      * @return 执行器类名
      */
     Class<?> clazz();
+
+    /**
+     * 节点的描述性文件，包含使用以及可用参数的说明等信息
+     *
+     * @return 节点的描述性文件位置
+     */
+    String readme() default "META-INF/build-in/default.buildin.executor.description.md";
 }
