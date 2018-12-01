@@ -1,21 +1,21 @@
 package org.chim.altass.core.executor.io;
 
 import com.jcraft.jsch.JSchException;
-import org.chim.altass.core.constant.StreamData;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
+import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.buildin.attr.AHost;
 import org.chim.altass.core.domain.buildin.attr.ASSH;
-import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractPipelineExecutor;
+import org.chim.altass.core.executor.config.ColumnConfig;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
 import org.chim.altass.toolkit.ssh.SSHTerminal;
 import org.chim.altass.toolkit.ssh.SessionOptional;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -133,7 +133,7 @@ public class TaildirStreamExecutor extends AbstractPipelineExecutor implements S
                 }
 
                 // execute data pushing
-                this.pushData(new StreamData(this.executeId, null, targetData));
+                this.pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, targetData));
             }
         } catch (ExecuteException e) {
             e.printStackTrace();

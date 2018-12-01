@@ -55,9 +55,9 @@
     包括一些子配置的支持等内容，该监听器应该在SpringListener之下，并且在其它之前
     2016-11-20
     -->
-    <listener>
-        <listener-class>org.chim.altass.smartui.listener.FrameworkListener</listener-class>
-    </listener>
+    <!--<listener>-->
+        <!--<listener-class>org.chim.altass.smartui.listener.FrameworkListener</listener-class>-->
+    <!--</listener>-->
 
     <!--应用初始化监听器获取的参数-->
     <context-param>

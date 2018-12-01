@@ -33,10 +33,7 @@ import org.redisson.api.RLock;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.chim.altass.core.constant.ExecutorAttr.ATTR_NEXT_ENTRY_INFO;
 import static org.chim.altass.core.constant.ExecutorAttr.ATTR_NEXT_ENTRY_SIZE;
@@ -89,7 +86,13 @@ public abstract class AbstractNodeExecutor extends AbstractExecutor implements I
         Class<? extends AbstractExecutor> executorClz = this.entry.getExecutorClz();
 
         if (executorClz != null) {
-            Field[] declaredFields = executorClz.getDeclaredFields();
+
+            // Search super class fields
+            List<Field> declaredFields = new ArrayList<>();
+            for (Class<?> objClz = executorClz; objClz != Object.class; objClz = objClz.getSuperclass()) {
+                declaredFields.addAll(Arrays.asList(objClz.getDeclaredFields()));
+            }
+
             try {
 
                 InputParam inputParam = this.context.getInputParam();

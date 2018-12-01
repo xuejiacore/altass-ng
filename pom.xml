@@ -76,6 +76,8 @@
         <module>altass-ng-toolkit</module>
         <module>altass-ng-testing</module>
         <module>altass-ng-smartui</module>
+
+        <module>altass-ng-datasource</module>
     </modules>
 
 

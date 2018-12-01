@@ -21,6 +21,8 @@ public class DebugConfig {
 
     private String outputJson = null;
 
+    private boolean useOutputJson = false;
+
     public boolean isThrowError() {
         return throwError;
     }
@@ -59,5 +61,13 @@ public class DebugConfig {
 
     public void setOutputJson(String outputJson) {
         this.outputJson = outputJson;
+    }
+
+    public boolean isUseOutputJson() {
+        return useOutputJson;
+    }
+
+    public void setUseOutputJson(boolean useOutputJson) {
+        this.useOutputJson = useOutputJson;
     }
 }

@@ -6,6 +6,7 @@ import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.meta.InputParam;
 import org.chim.altass.core.domain.meta.MetaData;
 import org.chim.altass.core.exception.ExecuteException;
@@ -124,9 +125,8 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
-        StreamData streamData = transformData(data);
-        Map<String, Object> previousOutput = JSON.parseObject(String.valueOf(streamData.getData()), Map.class);
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
+        Map<String, Object> previousOutput = JSON.parseObject(String.valueOf(data.getData()), Map.class);
         this.processSqlScript(previousOutput, true);
     }
 
@@ -187,7 +187,7 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
         // int The number of rows affected by the insert.
         int insertResult = sqlSession.insert(this.executeId, previousOutput);
         previousOutput.put(KEY_AFFECTED_ROWS, insertResult);
-        pushData(new StreamData(this.executeId, null, previousOutput));
+        pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, previousOutput));
     }
 
     /**
@@ -201,7 +201,7 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
         sqlSession.select(this.executeId, previousOutput, context -> {
             Object resultObject = context.getResultObject();
             try {
-                pushData(new StreamData(this.executeId, null, resultObject));
+                pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, resultObject));
             } catch (ExecuteException e) {
                 e.printStackTrace();
             }
@@ -221,7 +221,7 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
         // int The number of rows affected by the update.
         int updateResult = sqlSession.update(this.executeId, previousOutput);
         previousOutput.put(KEY_AFFECTED_ROWS, updateResult);
-        pushData(new StreamData(this.executeId, null, previousOutput));
+        pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, previousOutput));
     }
 
     /**
@@ -237,11 +237,12 @@ public class JdbcExecutor extends AbstractStreamNodeExecutor {
         // int The number of rows affected by the delete.
         int deleteResult = sqlSession.delete(this.executeId, previousOutput);
         previousOutput.put(KEY_AFFECTED_ROWS, deleteResult);
-        pushData(new StreamData(this.executeId, null, previousOutput));
+        pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, previousOutput));
     }
 
     @Override
     public boolean onNodeNormalProcessing() throws ExecuteException {
+        // TODO: 如果后续节点是一个非流式节点，需要将数据进行合并输出，由直接后继一次性接收
         throw new ExecuteException(new UnsupportedOperationException());
 //        processSqlScript(this.inputParseParams, false);
 //        return true;

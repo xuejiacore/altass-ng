@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: org.apache.flume:flume-ng-auth:1.9.0-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181114.173303-41.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181119.124445-43.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181114.173303-41-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181119.124445-43-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181114.173303-41-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/flume/flume-ng-auth/1.9.0-SNAPSHOT/flume-ng-auth-1.9.0-20181119.124445-43-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

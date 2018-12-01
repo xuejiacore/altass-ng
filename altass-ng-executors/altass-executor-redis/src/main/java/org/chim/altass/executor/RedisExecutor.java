@@ -7,6 +7,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.meta.InputParam;
 import org.chim.altass.core.domain.meta.MetaData;
 import org.chim.altass.core.exception.ExecuteException;
@@ -101,18 +102,17 @@ public class RedisExecutor extends AbstractStreamNodeExecutor {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
         if (this.scripts == null || StringUtils.isBlank(this.scripts.getScript())) {
             throw new IllegalArgumentException("Redis Script Content Not Allowed Null.");
         }
 
-        StreamData streamData = transformData(data);
-        Map<String, Object> params = JSON.parseObject(String.valueOf(streamData.getData()), Map.class);
+        Map<String, Object> params = JSON.parseObject(String.valueOf(data.getData()), Map.class);
 
         try {
             Map<String, Object> runContext = redisScript.run(scripts.getScript(), params);
             runContext.putAll(params);
-            pushData(new StreamData(this.executeId, null, runContext));
+            pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, runContext));
         } catch (Exception e) {
             throw new ExecuteException(e);
         } finally {

@@ -7,12 +7,13 @@ import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.ansi.AnsiColor;
 import org.chim.altass.core.ansi.AnsiOutput;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractStreamNodeExecutor;
 import org.chim.altass.core.executor.RestoreContext;
 import org.chim.altass.toolkit.job.UpdateAnalysis;
 
-import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 /**
  * Class Name: DebugStreamExecutor
@@ -27,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 @Resource(name = "DebugStream", clazz = DebugStreamExecutor.class, midImage = "res/images/node/debug_bg.png", pageUrl = "nodeConfigs/debug/debugNodeConfig.jsp")
 public class DebugStreamExecutor extends AbstractStreamNodeExecutor {
 
-    @AltassAutowired
+    @AltassAutowired(analyzable = false)
     private DebugConfig debugConfig = null;
 
     private long beginTime = 0;
@@ -71,18 +72,35 @@ public class DebugStreamExecutor extends AbstractStreamNodeExecutor {
     }
 
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
         try {
-            String dataStr = new String(data, "UTF-8");
-
             Thread.sleep(debugConfig.getDelay());
-            StreamData streamData = JSON.parseObject(dataStr, StreamData.class);
 
-            String str = "DEBUG-DATA:\t" + Thread.currentThread().getName() + "\t" + this.getExecuteId() + "\t" + streamData.getData();
+            String str = "DEBUG-DATA:\t" + Thread.currentThread().getName() + "\t" + this.getExecuteId() + "\t" +
+                    data.getStreamSrc() + "\t" + data.getData() + "\t" + data.getGroupKey() + "\t" + data.getEvent();
+            if (data.getData() == null) {
+                str = JSON.toJSONString(data);
+            }
             str = AnsiOutput.toString(AnsiColor.BLUE, str);
             System.out.println(str);
-            pushData(new StreamData(this.getExecuteId(), null, streamData.getData()));
-        } catch (UnsupportedEncodingException | InterruptedException e) {
+            Object pushData;
+            if (debugConfig.isUseOutputJson()) {
+                Object strData = data.getData();
+                if (strData == null || "null".equalsIgnoreCase(String.valueOf(strData))) {
+                    pushData = debugConfig.getOutputJson();
+                } else {
+                    Map map = JSON.parseObject(String.valueOf(strData), Map.class);
+                    if (map == null || debugConfig.getOutputJson() == null) {
+                        pushData = debugConfig.getOutputJson();
+                    } else {
+                        pushData = scriptParse(map, debugConfig.getOutputJson());
+                    }
+                }
+            } else {
+                pushData = data.getData();
+            }
+            pushData(new StreamData(this.getExecuteId(), StreamEvent.EVENT_DATA, pushData));
+        } catch (Exception e) {
             throw new ExecuteException(e);
         } finally {
             postFinished();

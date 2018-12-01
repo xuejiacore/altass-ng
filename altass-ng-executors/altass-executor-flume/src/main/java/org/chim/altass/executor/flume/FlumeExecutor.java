@@ -57,7 +57,7 @@ public class FlumeExecutor extends AbstractStreamNodeExecutor {
     }
 
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
 
         // 获取消费对象
 

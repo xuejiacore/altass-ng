@@ -24,7 +24,8 @@ import org.redisson.api.RCountDownLatch;
 
 import java.util.List;
 
-import static org.chim.altass.core.constant.ExecutorAttr.*;
+import static org.chim.altass.core.constant.ExecutorAttr.ATTR_EXECUTE_ID;
+import static org.chim.altass.core.constant.ExecutorAttr.ATTR_IS_JOB;
 
 /**
  * Class Name: Entry
@@ -66,6 +67,11 @@ public class Entry extends Node implements IEntry {
 
     public Entry(String nodeId) {
         setNodeId(nodeId);
+    }
+
+    public Entry(String nodeId, Class<? extends AbstractExecutor> executorClz) {
+        setNodeId(nodeId);
+        setExecutorClz(executorClz);
     }
 
     public Entry(Integer x, Integer y) {
@@ -318,18 +324,20 @@ public class Entry extends Node implements IEntry {
         }
     }
 
-    public void inject(String key, Object val) {
+    public Entry inject(String key, Object val) {
         if (this.common == null) {
             this.common = new ACommon();
         }
         this.common.addAttr(key, val);
+        return this;
     }
 
-    public void inject(Class<?> keyType, String json) {
+    public Entry inject(Class<?> keyType, String json) {
         if (this.common == null) {
             this.common = new ACommon();
         }
         this.common.addAttr(keyType, json);
+        return this;
     }
 
     public void addJsonArg(String key, String json) {

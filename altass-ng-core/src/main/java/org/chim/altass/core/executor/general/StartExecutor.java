@@ -13,6 +13,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.StartNodeConfig;
@@ -90,7 +91,7 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
     }
 
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
         throw new NotImplementedException();
     }
 
@@ -106,12 +107,12 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
             @SuppressWarnings("Duplicates")
             public void run() {
                 try {
-                    altassChannel.publish(new StreamData(entry.getNodeId(), "STARTED"));
+                    altassChannel.publish(new StreamData(entry.getNodeId(), StreamEvent.EVENT_START));
 
                     // =================================================================================================
                     try {
                         if (startNodeConfig == null) {
-                            pushData(new StreamData(StartExecutor.this.entry.getNodeId(), "SKIP"));
+                            pushData(new StreamData(StartExecutor.this.entry.getNodeId(), StreamEvent.EVENT_SKIP));
                         } else {
                             Class<? extends MiniRunnable> runnableClz = startNodeConfig.getRunnableClz();
                             if (runnableClz != null) {
@@ -133,7 +134,7 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
                     streamLatch.countDown();
                     Thread.sleep(100);
                     postFinished();
-                } catch (InterruptedException | IllegalAccessException | InstantiationException e) {
+                } catch (InterruptedException | IllegalAccessException | InstantiationException | ExecuteException e) {
                     e.printStackTrace();
                 }
             }
@@ -154,6 +155,6 @@ public class StartExecutor extends AbstractStreamNodeExecutor implements MiniRun
 
     @Override
     public void onDataFlush(Object data) throws ExecuteException {
-        pushData(new StreamData(this.entry.getNodeId(), null, data));
+        pushData(new StreamData(this.entry.getNodeId(), StreamEvent.EVENT_DATA, data));
     }
 }

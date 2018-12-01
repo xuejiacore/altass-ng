@@ -19,12 +19,13 @@ public class StreamData {
     private Boolean successful = false;                         // data transfer successful
     private String streamSrc = null;                            // tag the source of current streaming data
     private Object data = null;                                 // data object will be transfer to json structure
-    private String msg = null;                                  // transfer message
+    private byte event = StreamEvent.EVENT_DATA;                // transfer message
+    private String groupKey = null;
     private Integer count = 0;                                  // unused
-    private String head = null;                                 //
+    private String head = null;                                 // data header
+    private byte dataType = DataStructure.JSON;                 // data transfer type
 
     public StreamData() {
-        msg = "#data";
         this.uniqueId = UUID.randomUUID().toString();
     }
 
@@ -33,14 +34,20 @@ public class StreamData {
         this.streamSrc = src;
     }
 
-    public StreamData(String src, String msg) {
-        this.msg = msg;
+    public StreamData(String src, byte event) {
+        this();
         this.streamSrc = src;
+        this.event = event;
+    }
+
+    public StreamData(String src, byte streamEvent, Object data) {
+        this.event = streamEvent;
+        this.streamSrc = src;
+        this.data = data;
         this.uniqueId = UUID.randomUUID().toString();
     }
 
-    public StreamData(String src, String msg, Object data) {
-        this.msg = msg == null ? "#data" : msg;
+    public StreamData(String src, Object data) {
         this.streamSrc = src;
         this.data = data;
         this.uniqueId = UUID.randomUUID().toString();
@@ -62,12 +69,12 @@ public class StreamData {
         this.data = data;
     }
 
-    public String getMsg() {
-        return msg;
+    public byte getEvent() {
+        return event;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setEvent(byte event) {
+        this.event = event;
     }
 
     public String getStreamSrc() {
@@ -100,5 +107,43 @@ public class StreamData {
 
     public void setHead(String head) {
         this.head = head;
+    }
+
+    public Boolean getSuccessful() {
+        return successful;
+    }
+
+    public void setSuccessful(Boolean successful) {
+        this.successful = successful;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public byte getDataType() {
+        return dataType;
+    }
+
+    /**
+     * specify data field's type
+     *
+     * @param dataType data Type {@link DataStructure}
+     * @see DataStructure
+     */
+    public void setDataType(byte dataType) {
+        this.dataType = dataType;
+    }
+
+    public boolean dtis(byte dt) {
+        return this.dataType == dt;
+    }
+
+    public String getGroupKey() {
+        return groupKey;
+    }
+
+    public void setGroupKey(String groupKey) {
+        this.groupKey = groupKey;
     }
 }

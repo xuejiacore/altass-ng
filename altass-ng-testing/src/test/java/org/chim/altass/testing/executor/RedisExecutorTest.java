@@ -36,26 +36,20 @@ public class RedisExecutorTest extends AbstractTesting {
 
             Scripts scripts = new Scripts();
             String scriptContent = "var0 = hget chimtestkey 1 key1; " +
-                    "var1 = hset chimtestkey 1 ${column2} ${column1}; " +
-                    "var2 = hget chimtestkey 1 ${column2};" +
+                    "var1 = hset chimtestkey@20 1 ${column2} ${column1}; " +
+                    "var2 = hget chimtestkey@20 1 ${column2};" +
                     "var3 = hset chimtestkey 2 $[var2] $[var2+var1];" +
                     "var4 = hget chimtestkey 2 key1;" +
                     "hdel chimtestkey 2 $[var2+34];";
             scripts.setScript(scriptContent);
 
-            Entry redis = new Entry("RedisNode");
-            redis.setExecutorClz(RedisExecutor.class);
-            redis.inject("redisConfig", redisConfig);
-            redis.inject("scripts", scripts);
-            job.addEntry(redis);
+            Entry redis = new Entry("RedisNode", RedisExecutor.class)
+                    .inject("redisConfig", redisConfig)
+                    .inject("scripts", scripts);
 
-            Entry streamDebug = new Entry("StreamDebug");
-            streamDebug.setExecutorClz(DebugStreamExecutor.class);
-            job.addEntry(streamDebug);
+            Entry streamDebug = new Entry("StreamDebug", DebugStreamExecutor.class);
 
-            job.connect(startNode, redis);
-            job.connect(redis, streamDebug);
-            job.connect(streamDebug, endNode);
+            job.link(startNode, redis, streamDebug, endNode);
         }
     }
 

@@ -1,16 +1,14 @@
 package org.chim.altass.core.domain.buildin.attr;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.chim.altass.base.parser.exml.anntation.Attr;
 import org.chim.altass.base.parser.exml.anntation.Elem;
 import org.chim.altass.base.script.Script;
+import org.chim.altass.toolkit.script.JsonHelper;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Class Name: ACommon
@@ -25,7 +23,6 @@ import java.util.regex.Pattern;
  */
 @Elem(alias = "common", version = "1.0")
 public class ACommon {
-    private static final Pattern matchIdxTag = Pattern.compile("(.*)\\[(\\d+)]$");
     private Script script = null;
 
     @Attr(alias = "id")
@@ -62,7 +59,7 @@ public class ACommon {
         this.name = name;
         this.tag = tag;
         this.extAttr = extAttr;
-        this.parseContext = new HashMap<String, Object>(this.extAttr);
+        this.parseContext = new HashMap<>(this.extAttr);
     }
 
     public Integer getId() {
@@ -95,7 +92,7 @@ public class ACommon {
 
     public void setExtAttr(Map<String, Object> extAttr) {
         this.extAttr = extAttr;
-        this.parseContext = new HashMap<String, Object>(this.extAttr);
+        this.parseContext = new HashMap<>(this.extAttr);
         this.jsonAttr = JSON.toJSONString(this.extAttr);
     }
 
@@ -107,7 +104,7 @@ public class ACommon {
     public void setJsonAttr(String jsonAttr) {
         this.jsonAttr = jsonAttr;
         this.extAttr = JSON.parseObject(jsonAttr, Map.class);
-        this.parseContext = new HashMap<String, Object>(this.extAttr);
+        this.parseContext = new HashMap<>(this.extAttr);
     }
 
     /**
@@ -119,7 +116,7 @@ public class ACommon {
     public void extParseContext(Map<String, Object> extParse) {
         if (extParse != null && extParse.size() > 0) {
             if (this.parseContext == null) {
-                this.parseContext = new HashMap<String, Object>(this.extAttr);
+                this.parseContext = new HashMap<>(this.extAttr);
             }
             this.parseContext.putAll(extParse);
         }
@@ -133,7 +130,7 @@ public class ACommon {
      */
     public void addAttr(String key, Object val) {
         if (this.extAttr == null) {
-            this.extAttr = new HashMap<String, Object>();
+            this.extAttr = new HashMap<>();
         }
         this.extAttr.put(key, val);
         this.jsonAttr = JSON.toJSONString(this.extAttr);
@@ -177,97 +174,15 @@ public class ACommon {
      * recognize the object search expression an return the val
      *
      * @param keyExpr    the expression to parse
-     * @param paramParse 是否需要参数解析
+     * @param paramParse true if need to parse parameters, else false
      * @return the value of found object
      */
     public Object getAttr(String keyExpr, boolean paramParse) {
         try {
-            return getAttr(null, keyExpr, paramParse);
+            return JsonHelper.jsonget(JSON.parseObject(this.jsonAttr), keyExpr, this.parseContext, paramParse, this.script);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
-    }
-
-    /**
-     * to find the attributes from a common entry
-     * <p>
-     * recognize the object search expression an return the val
-     *
-     * @param obj        the obj that will be searcher in recursive call
-     * @param keyExpress the expression to parse
-     * @param paramParse 是否进行参数解析
-     * @return the value of found object
-     */
-    @SuppressWarnings("unchecked")
-    private Object getAttr(JSONObject obj, String keyExpress, boolean paramParse) throws Exception {
-        // prepare the key expression
-        keyExpress = keyExpress.startsWith(".") ? keyExpress.substring(1) : keyExpress;
-        JSONObject jsonObject = obj != null ? obj : JSON.parseObject(this.jsonAttr);
-
-        // is a simple pure key to obtain value which not contain symbol dot.
-        if (!keyExpress.contains(".")) {
-            if (keyExpress.length() == 0 || !keyExpress.contains("[") && !keyExpress.contains("]")) {
-                // empty key will back obj or will return the value with key expression
-                Object data = keyExpress.length() == 0 ? jsonObject : jsonObject.get(keyExpress);
-                if (data instanceof Map) {
-                    // parse variables by self
-                    for (Object key : ((Map) data).keySet()) {
-                        Object val = ((Map) data).get(key);
-                        if (val instanceof String) {
-                            if (paramParse) {
-                                val = this.script.parseScript(this.parseContext, (String) val);
-                            }
-                            ((Map) data).put(key, val);
-                        }
-                    }
-                }
-                return data;
-            }
-        }
-
-        // split the key expression
-        String[] keyArrays = keyExpress.split("\\.");
-
-        // the value that will be return
-        Object attr;
-
-        // expression detector with symbol dot
-        int index = 0;
-
-        String key = "";
-        // to save pure key which contain index tag
-        String pureKey;
-        // to save array index which contain index tag
-        int arrayIdx;
-
-        do {
-            key += (index == 0 ? "" : ".") + keyArrays[index++];
-
-            // match whether key contain a array index, it will tag the key is a array object
-            Matcher matcher = matchIdxTag.matcher(key);
-            if (matcher.find()) {
-
-                pureKey = matcher.group(1);
-                arrayIdx = Integer.valueOf(matcher.group(2));
-                attr = ((JSONArray) jsonObject.get(pureKey)).get(arrayIdx);
-            } else {
-
-                attr = jsonObject.get(key);
-            }
-        } while (attr == null && index < keyArrays.length);
-
-
-        if (attr != null) {
-            if (attr instanceof JSONObject) {
-                String keyExpr = keyExpress.replaceFirst(key.replace("[", "\\["), "");
-                return getAttr((JSONObject) attr, keyExpr, paramParse);
-            } else {
-                return attr;
-            }
-        }
-
-        // not found any value of
         return null;
     }
 

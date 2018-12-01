@@ -6,6 +6,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.IEntry;
 import org.chim.altass.core.manager.ConnectorManager;
 
@@ -106,12 +107,12 @@ public class AltassRabbitChannel extends AbstractAltassChannel {
     public boolean doPublish(StreamData data) {
         String currentNodeExchange = streamingInfo.getEntry().getNodeId();
         String currentNodeId = streamingInfo.getEntry().getNodeId();
-        String msg = data.getMsg();
-        String routingKey = null;
-        if (msg.equalsIgnoreCase("FINISHED") || msg.equalsIgnoreCase("SKIP")) {
+        byte event = data.getEvent();
+        String routingKey;
+        if (event == StreamEvent.EVENT_GROUP_FINISHED || event == StreamEvent.EVENT_FINISHED || event == StreamEvent.EVENT_SKIP) {
             data.setHead("EVENT");
             routingKey = currentNodeId + "." + currentNodeId + ".EVENT";
-        } else if (msg.equalsIgnoreCase("STARTED")) {
+        } else if (event == StreamEvent.EVENT_START) {
             data.setHead("EVENT");
             routingKey = currentNodeId + ".*.EVENT";
         } else {

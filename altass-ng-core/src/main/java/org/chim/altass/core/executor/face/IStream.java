@@ -39,7 +39,7 @@ public interface IStream {
      * @param data a json structure data from last streaming node.
      * @throws ExecuteException Execute Exception
      */
-    void onStreamProcessing(byte[] data) throws ExecuteException;
+    void onStreamProcessing(StreamData data) throws ExecuteException;
 
     /**
      * 如果isStreamProcessor判定不需要采用流式处理，那么该方法将会被执行，这是普通的执行方法，由于onNodeProcessing已经被

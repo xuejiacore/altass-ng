@@ -7,6 +7,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.buildin.attr.CommonStreamConfig;
 import org.chim.altass.core.domain.buildin.attr.FileStreamConfig;
 import org.chim.altass.core.exception.ExecuteException;
@@ -128,7 +129,7 @@ public class FileInputStreamExecutor extends AbstractPipelineExecutor {
                 }
 
                 // execute data pushing
-                this.pushData(new StreamData(this.executeId, null, targetData));
+                this.pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, targetData));
             }
         } catch (IOException e) {
             throw new ExecuteException(e);

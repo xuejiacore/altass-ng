@@ -1,6 +1,7 @@
 package org.chim.altass.core.executor;
 
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.IEntry;
 import org.chim.altass.core.exception.ExecuteException;
 
@@ -101,8 +102,7 @@ public abstract class AbstractPipelineExecutor extends AbstractStreamNodeExecuto
             @Override
             public void run() {
                 try {
-                    StreamData data;
-                    altassChannel.publish(new StreamData(entry.getNodeId(), "STARTED"));
+                    altassChannel.publish(new StreamData(entry.getNodeId(), StreamEvent.EVENT_START));
                     Thread.sleep(100);
 
                     // =================================================================================================
@@ -115,11 +115,11 @@ public abstract class AbstractPipelineExecutor extends AbstractStreamNodeExecuto
                     if (streamingInfo.isDistributeNext()) {
                         for (IEntry successorEntry : streamingInfo.getStreamSuccessorIdxMap().values()) {
                             Integer cnt = streamingInfo.getPushDataCntMap().get(successorEntry.getNodeId());
-                            altassChannel.publish(new StreamData(entry.getNodeId(), "FINISHED", cnt));
+                            altassChannel.publish(new StreamData(entry.getNodeId(), StreamEvent.EVENT_FINISHED, cnt));
                         }
                     } else {
                         int dataPushCount = streamingInfo.getDataPushCount();
-                        altassChannel.publish(new StreamData(entry.getNodeId(), "FINISHED", dataPushCount));
+                        altassChannel.publish(new StreamData(entry.getNodeId(), StreamEvent.EVENT_FINISHED, dataPushCount));
                     }
                 } catch (InterruptedException | ExecuteException e) {
                     e.printStackTrace();
@@ -158,7 +158,7 @@ public abstract class AbstractPipelineExecutor extends AbstractStreamNodeExecuto
 
     @Deprecated
     @Override
-    public final void onStreamProcessing(byte[] data) throws ExecuteException {
+    public final void onStreamProcessing(StreamData data) throws ExecuteException {
         // 管道流特性，不会流式处理上一个节点（上一个节点不能是流式节点）
         // 也就是当前节点是不可能进入当前方法的.
     }

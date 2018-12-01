@@ -91,16 +91,13 @@ public class HttpExecutor extends AbstractStreamNodeExecutor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
         // send process result to next streaming node if existed
         StreamData toNextPipeline = null;
 
         // receive stream data
         try {
-            String dataStr = new String(data, "UTF-8");
-            StreamData streamData = JSON.parseObject(dataStr, StreamData.class);
-
-            Object dataObj = streamData.getData();
+            Object dataObj = data.getData();
             if (dataObj instanceof Map && ((Map) dataObj).size() != 0) {
                 // use script parser to parse variables with stream data mapper
                 String requestUrl = scriptParse((Map<String, Object>) dataObj, this.httpConfig.getUrl());
@@ -113,9 +110,9 @@ public class HttpExecutor extends AbstractStreamNodeExecutor {
                 String response = null;
                 String method = this.httpConfig.getMethod().toUpperCase();
                 if ("GET".equals(method)) {
-                    response = this.doGet(params, queryStr, requestUrl, streamData.getStreamSrc());
+                    response = this.doGet(params, queryStr, requestUrl, data.getStreamSrc());
                 } else if ("POST".equals(method)) {
-                    response = this.doPost(params, requestUrl, streamData.getStreamSrc());
+                    response = this.doPost(params, requestUrl, data.getStreamSrc());
                 }
 
                 // send process result to next streaming node

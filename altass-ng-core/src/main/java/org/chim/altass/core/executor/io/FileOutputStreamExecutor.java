@@ -1,6 +1,5 @@
 package org.chim.altass.core.executor.io;
 
-import com.alibaba.fastjson.JSON;
 import org.chim.altass.base.io.UniversalFileSystem;
 import org.chim.altass.core.annotation.AltassAutowired;
 import org.chim.altass.core.annotation.Executable;
@@ -109,7 +108,8 @@ public class FileOutputStreamExecutor extends AbstractStreamNodeExecutor {
             commonStreamConfigNotNull = commonStreamConfig != null;
             columnConfigNotNull = columnConfig != null;
             structuringAndWillParse = commonStreamConfigNotNull && commonStreamConfig.isStructuring();
-            jsonDataStruct = commonStreamConfigNotNull && commonStreamConfig.getDataStruct() == CommonStreamConfig.DATA_STRUCT_JSON;
+            jsonDataStruct = commonStreamConfigNotNull
+                    && commonStreamConfig.getDataStruct() == CommonStreamConfig.DATA_STRUCT_JSON;
             willParseJsonToRowData = structuringAndWillParse && jsonDataStruct && columnConfigNotNull;
             columnList = columnConfigNotNull ? columnConfig.getColumnList() : null;
             return true;
@@ -149,19 +149,15 @@ public class FileOutputStreamExecutor extends AbstractStreamNodeExecutor {
     }
 
     @Override
-    public void onStreamProcessing(byte[] data) throws ExecuteException {
+    public void onStreamProcessing(StreamData data) throws ExecuteException {
         try {
-            String dataStr = new String(data, "UTF-8");
-            EXECUTOR_LOGGER("msg", "Output Stream Data", "rowData", dataStr);
-            StreamData streamData = JSON.parseObject(dataStr, StreamData.class);
-
             // 如果开启了数据解析抽取，进行数据行解析
             if (willParseJsonToRowData) {
                 if (columnList != null) {
-                    parseStructureToRowData(streamData, columnList);
+                    parseStructureToRowData(data, columnList);
                 }
             } else {
-                writer.write(String.valueOf(streamData.getData()));
+                writer.write(String.valueOf(data.getData()));
             }
 
             writer.write(fileStreamConfig.getLineBreak());

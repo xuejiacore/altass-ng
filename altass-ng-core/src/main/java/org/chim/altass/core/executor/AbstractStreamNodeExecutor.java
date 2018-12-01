@@ -3,6 +3,7 @@ package org.chim.altass.core.executor;
 import com.alibaba.fastjson.JSON;
 import org.chim.altass.core.IPipeline;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.domain.IEntry;
 import org.chim.altass.core.domain.buildin.attr.ARegion;
 import org.chim.altass.core.domain.buildin.entry.Entry;
@@ -15,8 +16,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -49,15 +48,8 @@ import java.util.concurrent.CountDownLatch;
 public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         implements IPipeline, IStream, TransactionListener {
     protected static final int START_DELAY = 250;                   // Delay of stream open. (ms)
-    //    private static final boolean durable = true;                    // Persistent
-//    private static final boolean exclusive = false;                 // Exclusive
-//    private static final boolean autoDelete = false;                // Auto delete queue
-    private String currentNodeId = null;                            // Current node id.
 
-//    @Deprecated
-//    private QueueingConsumer consumer = null;                       // Mq Consumer.
-//    @Deprecated
-//    protected Channel channel = null;                               // MQ Channel
+    private String currentNodeId = null;                            // Current node id.
 
     protected CountDownLatch finallyLatch = null;                   // 控制后继节点是否能够启动
     /*
@@ -68,6 +60,9 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
     protected StreamingInfo streamingInfo;
     protected AbstractAltassChannel altassChannel = null;
     protected boolean previousIsFinished = false;
+    protected ThreadLocal<Byte> groupMode = ThreadLocal.withInitial(() -> StreamEvent.EVENT_DATA);
+
+    protected ThreadLocal<String> groupKey = ThreadLocal.withInitial(() -> "");
 
     /**
      * To initialize streaming executor.
@@ -143,6 +138,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         boolean allIsTheSameRegion = true;
         String tmpRegion = null;
 
+        // Detect precursor
         if (precursorEntries != null) {
             for (IEntry entry : precursorEntries) {
                 Class<? extends AbstractExecutor> executorClz = entry.getExecutorClz();
@@ -168,6 +164,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         streamingInfo.setPreviousRegion(allIsTheSameRegion);
         previousIsFinished = !foundStreamPrecursor;
 
+        // Detect successor
         for (IEntry entry : successorsEntries) {
             Class<? extends AbstractExecutor> executorClz = entry.getExecutorClz();
             if (AbstractStreamNodeExecutor.class.isAssignableFrom(executorClz)) {
@@ -179,9 +176,9 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
             this.notFoundStreamSuccessor();
         }
 
-        // 控制后继节点在当前节点完全结束后
+        // To controller that successors execute process after current node had finished.
         finallyLatch = successorStreamCnt == 0 ? new CountDownLatch(precursorStreamCnt) : null;
-        // 对于流式处理节点，最后一个流式处理的等待次数，和直接前驱是流式处理节点的个数相关
+        // The waiting times of last node which is streaming is related to all precursor count for streaming processor.
         streamLatch = new CountDownLatch(precursorStreamCnt);
 
         streamingInfo.setPrecursorStreamCnt(precursorStreamCnt);
@@ -189,7 +186,8 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         streamingInfo.setFoundStreamPrecursor(foundStreamPrecursor);
         streamingInfo.setFoundStreamSuccessor(foundStreamSuccessor);
 
-        // 根据上述获得的前驱后继关系，初始化所有消息队列和交换机，为后续生命周期函数中推流操作做好初始化操作
+        // According to de precursor-successor relationship obtain above. All message queue and exchange are initialized
+        // to initialize the push-flow operation in the subsequent life cycle functions.
         this.prepareDataQueue();
         return super.onInit() && onChildInit();
     }
@@ -213,10 +211,10 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         streamingInfo.setDistributePrevious(((Entry) this.entry).getRegion() != null);
 
         int count = 0;
-        // 建立前驱节点的数据队列
+        // Build data queue of precursor node.
         if (streamingInfo.isFoundStreamPrecursor()) {
             for (IEntry precursorEntry : streamingInfo.getPrecursorEntries()) {
-                // 判断直接前驱中是否有流式节点，如果有，需要反向进行队列监听
+                // Need to reverse-listening data queue if precursor contains streaming node.
                 if (!AbstractStreamNodeExecutor.class.isAssignableFrom(precursorEntry.getExecutorClz())) {
                     continue;
                 }
@@ -229,7 +227,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
 
         count = 0;
 
-        // 建立后继节点的数据队列
+        // Build successor's data queue.
         if (streamingInfo.isFoundStreamSuccessor()) {
             this.checkWhetherSuccessorDistribute();
 
@@ -238,7 +236,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
                     continue;
                 }
 
-                // 存储索引以及对应的元素，用于分布式分片算法使用
+                // Cache index and item for data split.
                 streamingInfo.getStreamSuccessorIdxMap().put(count, successorsEntry);
 
                 String successorsEntryNodeId = successorsEntry.getNodeId();
@@ -251,7 +249,7 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
     }
 
     /**
-     * 检查后继节点是否满足分布式条件
+     * Check whether the successor node satisfies the distributed condition.
      */
     private void checkWhetherSuccessorDistribute() {
         String tmpRegionId = null;
@@ -299,6 +297,8 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
 
     @Override
     public void pushData(StreamData streamData) throws ExecuteException {
+        streamData.setEvent(groupMode.get());
+        streamData.setGroupKey(groupKey.get());
         altassChannel.publish(streamData);
         streamingInfo.incrCount();
     }
@@ -358,12 +358,12 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
      */
     @SuppressWarnings("deprecation")
     private void streamCoreProcessor() throws IOException, InterruptedException, ExecuteException {
-        altassChannel.publish(new StreamData(currentNodeId, "STARTED"));
+        altassChannel.publish(new StreamData(currentNodeId, StreamEvent.EVENT_START));
         Thread.sleep(200);
 
         while (true) {
             byte[] body = altassChannel.receive();
-            StreamData coveredData = JSON.parseObject(new String(body, "UTF-8"), StreamData.class);
+            StreamData coveredData = transformData(body);
 
             String dataSrc;
             if (coveredData != null) {
@@ -378,9 +378,9 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
 
             if (coveredData.getHead().equalsIgnoreCase("EVENT")) {
                 // 事件处理
-                if (coveredData.getMsg().contains("STARTED")) {
+                if (StreamEvent.EVENT_START == coveredData.getEvent()) {
                     onStreamOpen(coveredData);                                         // 流打开事件
-                } else if (coveredData.getMsg().contains("FINISHED")) {
+                } else if (StreamEvent.EVENT_FINISHED == coveredData.getEvent()) {
                     onStreamClose(coveredData);                                             // 流关闭事件
                     /*
                      * 注意，此处释放的条件 count > 1 的原因是管道流的传输结束前，前驱数据流的推送输出能力远远高于当前节
@@ -403,18 +403,26 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
                     previousIsFinished = true;
                     postFinished();
                     break;
-                } else if (coveredData.getMsg().contains("SKIP")) {
+                } else if (StreamEvent.EVENT_SKIP == coveredData.getEvent()) {
+                } else if (StreamEvent.EVENT_GROUP_FINISHED == coveredData.getEvent()) {
+                    this.onGroupFinish(coveredData);
                 }
 
             } else if (coveredData.getHead().equalsIgnoreCase("DATA")) {
 
+                if (coveredData.getEvent() == StreamEvent.EVENT_GROUP_DATA) {
+                    groupMode.set(StreamEvent.EVENT_GROUP_DATA);
+                    groupKey.set(coveredData.getGroupKey());
+                } else {
+                    groupMode.set(StreamEvent.EVENT_DATA);
+                }
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
 
                 // 处理流式数据核心方法，由子类负责实现处理逻辑，注意如果处理正常就必须返回一个非 null 的流数据对象
                 // 实例，以表示处理成功，后续流程将处理成功后的数据通过管道继续往后传递（如果当前节点的后继节点包含
                 // 有流式处理节点）
-                onStreamProcessing(body);
+                this.onStreamProcessing(coveredData);
 
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
                 // = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = * = *
@@ -434,15 +442,21 @@ public abstract class AbstractStreamNodeExecutor extends AbstractNodeExecutor
         }
     }
 
-    protected void postFinished() {
+    protected void onGroupFinish(StreamData coveredData) throws ExecuteException {
+        groupMode.set(StreamEvent.EVENT_GROUP_FINISHED);
+        groupKey.set(coveredData.getGroupKey());
+        this.pushData(coveredData);
+    }
+
+    protected void postFinished() throws ExecuteException {
         if (previousIsFinished) {
             if (streamingInfo.isDistributeNext()) {
                 for (IEntry entry : streamingInfo.getStreamSuccessorIdxMap().values()) {
                     Integer cnt = streamingInfo.getPushDataCntMap().get(entry.getNodeId());
-                    altassChannel.publish(new StreamData(currentNodeId, "FINISHED", cnt));
+                    altassChannel.publish(new StreamData(currentNodeId, StreamEvent.EVENT_FINISHED, cnt));
                 }
             } else {
-                altassChannel.publish(new StreamData(currentNodeId, "FINISHED", streamingInfo.getDataPushCount()));
+                altassChannel.publish(new StreamData(currentNodeId, StreamEvent.EVENT_FINISHED, streamingInfo.getDataPushCount()));
             }
         }
     }

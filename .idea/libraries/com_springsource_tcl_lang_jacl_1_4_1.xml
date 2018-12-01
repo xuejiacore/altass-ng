@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.springsource.tcl.lang.jacl-1.4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/altass-ng-smartui/src/main/webapp/WEB-INF/lib/com.springsource.tcl.lang.jacl-1.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

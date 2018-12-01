@@ -131,7 +131,7 @@ public abstract class AbstractTesting {
 
         // 内容流分割处理
         startNode.inject("startNodeConfig", config);
-        startNode.addJsonArg("fileStreamConfig", "{\"path\":\"D:/data/input_stream_data_source_demo.txt\"}");
+//        startNode.addJsonArg("fileStreamConfig", "{\"path\":\"D:/data/input_stream_data_source_demo.txt\"}");
         startNode.addJsonArg("columnConfig", "{\"ignoreHeader\":false, \"containColumnName\":true}");
         startNode.addJsonArg("commonStreamConfig", "{\"dataDivisible\":true}");
     }

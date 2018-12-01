@@ -7,6 +7,7 @@ import org.chim.altass.core.annotation.Executable;
 import org.chim.altass.core.annotation.Resource;
 import org.chim.altass.core.constant.ExecutorAbility;
 import org.chim.altass.core.constant.StreamData;
+import org.chim.altass.core.constant.StreamEvent;
 import org.chim.altass.core.exception.ExecuteException;
 import org.chim.altass.core.executor.AbstractPipelineExecutor;
 import org.chim.altass.core.executor.config.ComplexSequenceConfig;
@@ -107,7 +108,7 @@ public class GenSequenceExecutor extends AbstractPipelineExecutor {
         } else {
             runtimeParam.put("_final_result", s);
         }
-        pushData(new StreamData(this.executeId, null, runtimeParam));
+        pushData(new StreamData(this.executeId, StreamEvent.EVENT_DATA, runtimeParam));
     }
 
     @Override
